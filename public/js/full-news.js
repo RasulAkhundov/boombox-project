@@ -1,4 +1,10 @@
 $(document).ready(async function() {
+
+    if(window.location.pathname === "/full-news") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+    }
+
     //RIGHT TREND APPEND
     let rightTrend = await axios
     .get(`${window.development}/api/right-trend`)

@@ -1,4 +1,11 @@
 $(document).ready(async function() {
+
+    if(window.location.pathname === "/trend") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+        localStorage.removeItem('newsID');
+    }
+
     //GETTING TECHNO NEWS
     let trend = await axios
     .get(`${window.development}/api/get-trend-news`)

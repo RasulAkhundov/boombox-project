@@ -1,5 +1,11 @@
 $(document).ready(function() {
 
+    if(window.location.pathname === "/") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+        localStorage.removeItem('newsID');
+    }
+
     let passwordShow = false;
 
     $("#password_eye").click(() => {

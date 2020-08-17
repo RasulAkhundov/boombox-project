@@ -1,4 +1,11 @@
 $(document).ready(function() {
+
+    if(window.location.pathname === "/settings") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+        localStorage.removeItem('newsID');
+    }
+
     //GETTING USER INFORMATION FROM LOCAL STORAGE
     let tokenMe = localStorage.getItem('user');
     let userData = parseJwt(tokenMe);

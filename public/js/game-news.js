@@ -1,4 +1,11 @@
 $(document).ready(async function() {
+
+    if(window.location.pathname === "/game") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+        localStorage.removeItem('newsID');
+    }
+
     //GETTING TECHNO NEWS
     let game = await axios
     .get(`${window.development}/api/get-game-news`)

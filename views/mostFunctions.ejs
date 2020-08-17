@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/mostFunctions.css">
@@ -23,27 +26,54 @@
 
         <!-- TECHNO NEWS HEADER -->
         <div class="most_viewed_cover">
-            <div class="most-viewed-header px-0 px-md-5 py-4">
-                <div class="most-viewed-location d-flex align-items-center px-3 mb-4">
+            <div class="most-viewed-header px-0 px-md-4 py-3 py-sm-4">
+                <div class="most-viewed-location d-flex align-items-center p-3 p-sm-0 mb-1 mb-md-4">
                     <a href="/">Ana Sehife</a>
                     <i class="fas fa-angle-right"></i>
-                    <span>Videolar</span>
+                    <span id="category_location"></span>
                 </div>
                 <div class="most-viewed-body d-flex flex-column align-items-center px-3">
                     <div class="most-viewed-text d-flex align-items-center mb-3">
-                        <h2>Videolar</h2>
+                        <h2 id="category_header_h2">Videolar</h2>
                         <div class="most-viewed-circle"></div>
                     </div>
-                    <select id="most_viewed_select">
-                        <option value="most-voted">Ən çox səs verilən</option>
-                        <a href="/video/?order=most-viewed"><option value="most-viewed">Ən çox baxılan</option></a>
-                        <option value="most-discussed">Ən çox müzakirə olunan</option>
-                        <a href="/video/?order=recent"></option value="recent">Son</option></a>
-                        <option value="featured">Xüsusi</option>
-                        <option value="random">Təsadüfi</option>
-                        <option value="most-shared">Ən çox paylaşılan</option>
-                    </select>
+                    <div class="category_select">
+                        <div class="category_option_header d-flex align-items-center justify-content-between">
+                            <span id="category_text">Ən yeni</span>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
+                        <div class="category_options">
+                            <!-- <a class="most-voted"><div class="most-voted category_option" data-order-val="most-voted" data-order-name="Ən çox səs verilən">
+                                <span>Ən çox səs verilən</span>
+                            </div></a> -->
+                            <a class="most-viewed"><div class="most-viewed category_option" data-order-val="most-viewed" data-order-name="Ən çox baxılan">
+                                <span>Ən çox baxılan</span>
+                            </div></a>
+                            <!-- <a class="most-discussed"><div class="most-discussed category_option" data-order-val="most-discussed" data-order-name="Ən çox müzakirə olunan">
+                                <span>Ən çox müzakirə olunan</span>
+                            </div></a> -->
+                            <a class="new"><div class="recent category_option" data-order-val="new" data-order-name="Ən yeni">
+                                <span>Ən yeni</span>
+                            </div></a>
+                            <a class="featured"><div class="featured category_option" data-order-val="featured" data-order-name="Xüsusi">
+                                <span>Xüsusi</span>
+                            </div></a>
+                            <a class="old"><div class="random category_option" style="border: 0;" data-order-val="old" data-order-name="Ən kohnə">
+                                <span>Ən kohnə</span>
+                            </div></a>
+                            <!-- <a class="most-shared"><div class="most-shared category_option" data-order-val="most-shared" data-order-name="Ən çox paylaşılan">
+                                <span>Ən çox paylaşılan</span>
+                            </div></a> -->
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- CATEGORY NEWS FILTERING -->
+        <div class="category-news p-3 p-md-4">
+            <div class="row" id="category-news-row">
+                
             </div>
         </div>
     </div>

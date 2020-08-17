@@ -1,4 +1,11 @@
 $(document).ready(async function() {
+
+    if(window.location.pathname === "/admin-panel") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+        localStorage.removeItem('newsID');
+    }
+
     //GETTING ALL NEWS
     let allNews = await axios
     .get(`${window.development}/api/get-all-news`)

@@ -1,5 +1,10 @@
 $(document).ready(async function() {
 
+    if(window.location.pathname === "/") {
+        localStorage.removeItem('order');
+        localStorage.removeItem('category');
+    }
+
     //GETTING TECHNO NEWS
     let allNews = await axios
     .get(`${window.development}/api/get-all-news`)
@@ -181,6 +186,15 @@ $(document).ready(async function() {
         .put(`${window.development}/api/update-page-views/${id}`, formData)
         window.location.href = `/news/${id}`;
     });
+
+    ///SECTION LINK///
+    $(".sections-li").click(function() {
+        let sectionVal = {
+            name: $(this).text(),
+            val: $(this).data('section-val')
+        }
+        localStorage.setItem('category', JSON.stringify(sectionVal));
+    })
 });
 // jwt parse
 function parseJwt(token) {

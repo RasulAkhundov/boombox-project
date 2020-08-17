@@ -480,6 +480,10 @@ header {
     padding: 0;
     width: 100%;
 }
+.sections a {
+    text-decoration: none;
+    color: #efefef;
+}
 .sections ul li {
     padding: 10px 10px 10px 0;
     list-style: none;

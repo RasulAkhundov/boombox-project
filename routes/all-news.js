@@ -224,10 +224,67 @@ router.get('/more-from/:hashtag1', (req, res) => {
 })
 
 ///MOST FUNCTION FOR VIDEO
-router.get("/video", (req, res) => {
+router.get("/category/:hashtag1", (req, res) => {
 
-    
+    AllNews.find({ hashtag1: req.params.hashtag1 })
+    .sort({ hashtag1: 1 })
+    .then(categoryHashtag => {
+        if(!categoryHashtag) {
+            console.log("error from category hashtag");
+        } else {
+            res.status(200).json({ categoryHashtag });
+        }
+    })
     
 })
 
+///CATEGORY FILTERING 
+router.get('/category-:hashtag1', (req, res) => {
+
+    let order = req.query.order;
+
+    if(order === "most-viewed") {
+        AllNews.find({ hashtag1: req.params.hashtag1 })
+        .sort({ pageViews: -1 })
+        .then(categoryOrder => {
+            if(!categoryOrder) {
+                console.log("error from category hashtag");
+            } else {
+                res.status(200).json({ categoryOrder });
+            }
+        })
+    } else if(order === "new") {
+        AllNews.find({ hashtag1: req.params.hashtag1 })
+        .sort({ _id: -1 })
+        .then(categoryOrder => {
+            if(!categoryOrder) {
+                console.log("error from category hashtag");
+            } else {
+                res.status(200).json({ categoryOrder });
+            }
+        })
+    } else if(order === "old") {
+        AllNews.find({ hashtag1: req.params.hashtag1 })
+        .sort({ _id: 1 })
+        .then(categoryOrder => {
+            if(!categoryOrder) {
+                console.log("error from category hashtag");
+            } else {
+                res.status(200).json({ categoryOrder });
+            }
+        })
+    } else if(order === "featured") {
+        AllNews.find({ hashtag1: req.params.hashtag1 })
+        .sort({ pageViews: -1 })
+        .limit(3)
+        .then(categoryOrder => {
+            if(!categoryOrder) {
+                console.log("error from category hashtag");
+            } else {
+                res.status(200).json({ categoryOrder });
+            }
+        })
+    }
+})
+ 
 module.exports = router;

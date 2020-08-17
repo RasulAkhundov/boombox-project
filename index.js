@@ -85,7 +85,7 @@ app.get("/news/:id", (req, res) => {
     res.render('full-news')
 });
 
-app.get("/video", (req, res) => {
+app.get("/category-:hashtag1", (req, res) => {
     res.render("mostFunctions");
 });
 
