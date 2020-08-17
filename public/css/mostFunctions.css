@@ -1,0 +1,195 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.main-container {
+    width: 100%;
+    min-height: 100%;
+    background: #121117;
+}
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #000000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+.header-comp-1, .header-comp-2 {
+    display: flex;
+    align-items: center;
+}
+
+/* Header Comp 1 */
+.header-comp-1 .burger {
+    width: 62px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+.header-comp-1 ul {
+    margin: 0 0 0 30px;
+    padding: 0;
+    display: flex;
+}
+.header-comp-1 ul li {
+    list-style: none;
+    font-size: 18px;
+    color: white;
+    margin-right: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: 0.3s ease;
+}
+.header-comp-1 ul li:hover {
+    color: #D02E3E;
+}
+.header-comp-1 ul li i {
+    font-size: 18px;
+    margin-right: 5px;
+}
+.header-comp-1 ul a {
+    text-decoration: none;
+}
+
+/* Header comp 2 */
+.header-comp-2 i {
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
+.header-comp-2 #dash-login-btn {
+    padding: 8px 10px;
+    font-size: 16px;
+    color: white;
+    background: #D02E3E;
+    border: 0;
+    margin: 0 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s ease;
+}
+.header-comp-2 .user-profile {
+    background: url('https://healthcarejobs.ae/assets/img/user-avatar.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin: 0 15px;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.header-comp-2 .user-profile:hover {
+    border: 2px solid #D02E3E;
+}
+.header-comp-2 .user-profile-modal {
+    position: fixed;
+    top: 62px;
+    right: 20px;
+    display: none;
+    max-width: 200px;
+    flex-direction: column;
+    background: #121117;
+    z-index: 9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #292c3b;
+}
+.user-profile-modal span {
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid grey;
+}
+.user-profile-modal a {
+    text-decoration: none;
+}
+.user-profile-modal button {
+    padding: 8px 10px;
+    font-size: 14px;
+    width: 100%;
+    color: white;
+    background: transparent;
+    align-items: center;
+    border: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+    transition: 0.3s ease;
+}
+#user-profile-username {
+    border-bottom: 1px solid grey !important;
+}
+.user-profile-modal button:hover {
+    background: rgb(40, 42, 56);
+}
+.user-profile-modal #dash-logout-btn {
+    background: #D02E3E;
+    border-radius: 0 0 3px 3px;
+}
+.user-profile-modal i {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+/* TECHNO NEWS HEADER */
+.most_viewed_cover {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #292c3b;
+}
+.most-viewed-header {
+    margin-top: 62px;
+    width: 1250px;
+}
+.most-viewed-location a, .most-viewed-location span {
+    color: #8c8d8f;
+    font-size: 16px;
+    font-weight: 100;
+}
+.most-viewed-location i {
+    color: #717274;
+    font-size: 20px;
+    margin: 0 10px;
+}
+.most-viewed-text h2 {
+    font-size: 42px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    color: #efefef;
+    margin: 0 5px 0 0;
+}
+.most-viewed-text .most-viewed-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50px;
+    background: #6759EB;
+}
+@media screen and (max-width: 1400px) {
+    .most-viewed-header {
+        width: 100%;
+    }
+}

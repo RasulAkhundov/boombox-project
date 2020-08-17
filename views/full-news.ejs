@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <!-- SEMANTIC CSS -->
+    <link rel="stylesheet" href="/semantic/semantic.min.css">
+    <link rel="stylesheet" href="/css/full-news.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <!-- SEMANTIC JS -->
+    <script src="/semantic/semantic.min.js"></script>
+    <!-- config -->
+    <script src="/js/config.js"></script>
+    <script src="/js/moment.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/full-news.js"></script>
+    <script src="/js/user.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-container">
+
+        <!-- LOADING WRAPPER -->
+        <div class="loading-wrapper">
+            <img src="/img/loading.gif" alt="">
+        </div>
+
+        <!-- SEMANTIC POPUP  -->
+        <div class="success-modal warning-modal">
+            <p>Serh ugurla gonderildi !</p>
+            <i class="fas fa-times modal-close"></i>
+        </div> 
+        <div class="error-modal warning-modal">
+            <p>Serh gondermek ucun Daxil olun !</p>
+            <i class="fas fa-times modal-close"></i>
+        </div> 
+        
+        <%- include('../parts/header.ejs') -%>
+
+        <!-- NEWS -->
+        <div class="news mt-5">
+            <div class="row m-0 py-5 px-3 px-lg-5 d-flex align-items-start news_row">
+                <div class="col-12 px-1 px-sm-3">
+                    <div class="techno-news-location d-flex align-items-center px-0 px-sm-3 mb-4">
+                        <a href="/">Ana Sefihe</a>
+                        <i class="fas fa-angle-right"></i>
+                        <span id="news-name-location"></span>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-8 mb-4" id="news-wrapper" style="background: #121117">
+                    <div class="box-cover" style="background: #1D1E29; border-radius: 5px 5px 0 0;">
+                        <div class="hashtag">
+                            <div class="hashtags">
+                                <a href="#" id="hashtag-1"></a>
+                                <a href="#" id="hashtag-2"></a>
+                            </div>
+                            <div class="news-emoji">
+                                <div class="emoji-1 emoji-box">
+                                    <img src="" class="emoji-1-img" alt="">
+                                </div>
+                                <div class="emoji-2 emoji-box">
+                                    <img src="" class="emoji-2-img" alt="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-header">
+                            <h2 id="news-header-text"></h2>
+                        </div>
+                        <div class="news-description">
+                            <span id="news-description"></span>
+                        </div>
+                        <div class="about-news-author_cover d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between align-items-start align-items-sm-center">
+                            <div class="about-news-author d-flex align-items-center mb-3 mb-sm-0">
+                                <img id="author-image" src="" alt="">
+                                <p>by</p>
+                                <a href="#" id="author-name"></a>
+                                <p id="news-adding-time"></p>
+                            </div>
+                            <div class="comment-count d-flex align-items-center ml-2 ml-sm-0">
+                                <i class="far fa-comment" style="font-size: 22px; color: #2e2f41;"></i>
+                                <span id="news-authour-comment-count" style="margin: 0 5px 0 5px; color: #efefef; font-size: 20px;"></span>
+                                <i class="fas fa-eye ml-3" style="font-size: 20px; color: #fefefe"></i>
+                                <span id="news-view-count" style="margin: 0 5px 0 5px; color: #fefefe; font-size: 20px;"></span>
+                                <span style="font-size: 20px; color: #fefefe">baxış</span>
+                            </div>
+                        </div>
+                    </div>
+                    <img id="news-image" src="" alt="">
+
+                    <!-- LIKE UNLIKE -->
+                    <div class="like-unlike">
+                        <div class="like">
+                            <i class="fas fa-thumbs-up" id="like-btn"></i>
+                            <span id="like-count">0</span>
+                        </div>
+                        <div class="unlike">
+                            <i class="fas fa-thumbs-down" id="like-btn"></i>
+                            <span id="unlike-count">0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- ADD -->
+                    <div class="col-12 d-flex justify-content-center" style="background: #1D1E29;">
+                        <img src="/img/728x90.png" alt="" class="img-fluid m-3 m-sm-4">
+                    </div>
+
+                    <!-- PREVIOUS NEXT BUTTON -->
+                    <div class="col-12 p-3 p-sm-4 mb-4 d-flex align-items-center justify-content-between" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
+                        <a id="previous-btn-a"><button type="button" id="previous-btn"><i class="fas fa-chevron-left"></i>ƏVVƏLKI POST</button></a>
+                        <a id="next-btn-a"><button type="button" id="next-btn">NÖVBƏTİ POST<i class="fas fa-chevron-right"></i></button></a>
+                    </div>
+
+                    <!-- ABOUT AUTHOR -->
+                    <div class="col-12 p-0 mb-4 about-author" style="border-radius: 5px;">
+                        <div class="about-author-header">
+                            <img id="about-author-image" alt="">
+                            <h2 id="about-author-name"></h2>
+                            <span>tərəfindən paylaşıldı</span>
+                        </div>
+                        <div class="about-author-body">
+                            <span id="about-author-bio"></span>
+                        </div>
+                    </div>
+
+                    <!-- Comments -->
+                    <div class="col-12 p-0 mb-3 mb-sm-4" style="background: #1D1E29; border-radius: 5px;">
+                        <div class="comments">
+                            <span>Serhler:</span>
+                            <div class="write-comment" style="display: none;">
+                                <textarea id="comment-text" placeholder="Serh yaz..."></textarea>
+                                <button type="button" id="send-comment">Gonder</button>
+                            </div>
+        
+                            <span style="color: #efefef; margin: 20px 0; font-size: 16px; display: none;" class="comment-without-login" style="display: none;">Şərh yazmaq üçün <a href="/login" style="color: #d02e3e; margin: 0 5px; text-decoration: #d02e3e;">daxil ol</a>malısınız.</span>
+        
+                            <span id="comment-count" style="font-size: 18px;"></span>
+                            <!-- USER COMMENT -->
+                            <div class="comments-complation"style="margin-top: 10px;">
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <!-- ADD -->
+                    <div class="col-12 mb-3 mb-sm-4 d-flex justify-content-center">
+                        <img src="/img/728x90.png" alt="" class="img-fluid m-3 m-sm-4">
+                    </div>
+
+                    <!-- PREVIOUS AND NEXT POST -->
+                    <div class="col-12 p-0 mb-4 mb-sm-4 d-flex flex-column flex-sm-row">
+                        <a class="previous_post_a col-12 col-sm-6 pl-0 pr-0 pr-sm-3 mb-4 mb-sm-0" id="previous-post-a">
+                            <div class="col-12 p-0 flex-column previous_post" id="previous-post">
+                                <span>ƏVVƏLKI POST</span>
+                                <div class="previous_post_info p-3" style="background: #1D1E29;">
+                                    <div class="m-3 previous_post_img post-img"></div>
+                                    <div class="mt-3 post_header">
+                                        <h2 class="previous_post_header"></h2>
+                                        <div class="post_by_name d-flex align-items-center">
+                                            <p class="mb-0">by</p>
+                                            <span class="previous_post_name"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        <a class="next_post_a col-12 col-sm-6 pr-0 pl-0 pl-sm-3" id="next-post-a">
+                            <div class="col-12 p-0 flex-column next_post" id="next-post">
+                                <span>NÖVBƏTİ POST</span>
+                                <div class="next_post_info p-3" style="background: #1D1E29;">
+                                    <div class="m-3 next_post_img post-img"></div>
+                                    <div class="mt-3 post_header">
+                                        <h2 class="next_post_header"></h2>
+                                        <div class="post_by_name d-flex align-items-center">
+                                            <p class="mb-0">by</p>
+                                            <span class="next_post_name"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- MORE FROM -->
+                    <div class="col-12 p-0 mb-4 more-from">
+                        <span class="mb-3" id="more-from-header"></span>
+                        <div class="col-12 p-0 more-from-body">
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-12 col-lg-4 p-0 pl-sm-4">
+                    <div class="col-12 p-0 d-flex justify-content-center mb-4">
+                        <img src="https://boombox.px-lab.com/animatrix/wp-content/uploads/sites/9/2016/11/300_dark.png" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-12 p-0 d-flex flex-column align-items-center trending-news-wrapper" id="trending-news-wrapper">
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <i class="fas fa-bolt"></i>
+                            <h2>TRENDING</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <%- include('../parts/footer.ejs') -%>
+    </div>
+</body>
+</html>

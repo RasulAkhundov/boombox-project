@@ -1,0 +1,289 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    position: relative;
+}
+.main-container {
+    width: 100%;
+    padding: 75px 0 30px 0;
+    min-height: 100%;
+    background: #121117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #121117;
+    border-bottom: 1px solid #1f1f1f;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+}
+.header-comp-1, .header-comp-2 {
+    display: flex;
+    align-items: center;
+}
+
+/* Header Comp 1 */
+.header-comp-1 .burger {
+    width: 62px;
+    height: 62px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+}
+.header-comp-1 ul {
+    margin: 0 0 0 30px;
+    padding: 0;
+    display: flex;
+}
+.header-comp-1 ul li {
+    list-style: none;
+    font-size: 14px;
+    color: white;
+    margin-right: 20px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    transition: 0.3s ease;
+}
+.header-comp-1 ul li:hover {
+    color: #D02E3E;
+}
+.header-comp-1 ul li i {
+    font-size: 18px;
+    margin-right: 5px;
+}
+.header-comp-1 ul a {
+    text-decoration: none;
+}
+
+/* Header comp 2 */
+.header-comp-2 i {
+    font-size: 22px;
+    color: white;
+    cursor: pointer;
+}
+.header-comp-2 #dash-login-btn {
+    padding: 8px 10px;
+    font-size: 16px;
+    color: white;
+    background: #D02E3E;
+    border: 0;
+    margin: 0 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s ease;
+}
+.header-comp-2 .user-profile {
+    background: url('https://healthcarejobs.ae/assets/img/user-avatar.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    margin: 0 15px;
+    border: 2px solid white;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+.header-comp-2 .user-profile:hover {
+    border: 2px solid #D02E3E;
+}
+.header-comp-2 .user-profile-modal {
+    position: fixed;
+    top: 62px;
+    right: 20px;
+    display: none;
+    max-width: 200px;
+    flex-direction: column;
+    background: #121117;
+    z-index: 9;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #2e2f41;
+}
+.user-profile-modal span {
+    color: white;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    border-bottom: 1px solid grey;
+}
+.user-profile-modal a {
+    text-decoration: none;
+}
+.user-profile-modal button {
+    padding: 8px 10px;
+    font-size: 16px;
+    width: 100%;
+    color: white;
+    background: transparent;
+    align-items: center;
+    border: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    text-align: left;
+    transition: 0.3s ease;
+}
+#user-profile-username {
+    border-bottom: 1px solid grey !important;
+}
+.user-profile-modal button:hover {
+    background: rgb(40, 42, 56);
+}
+.user-profile-modal #dash-logout-btn {
+    background: #D02E3E;
+    border-radius: 0 0 3px 3px;
+}
+.user-profile-modal i {
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+/* Settings Wrapper */
+
+.settings-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    border-radius: 10px;
+    background: #1d1e29;
+}
+.change_image_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start !important;
+}
+.change_image_box {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+}
+.settings-wrapper img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 1px solid #efefef;
+    margin-right: 20px;
+}
+.settings-wrapper span {
+    font-size: 16px;
+    color: white;
+    font-weight: 400;
+}
+
+/* FILE INPUT DESIGN */
+.settings-wrapper .image_file {
+    color: #efefef;
+    margin: 5px 0 10px;
+    outline: none;
+    cursor: pointer;
+}
+.settings-wrapper .image_file::-webkit-file-upload-button {
+    visibility: hidden;
+}
+.settings-wrapper .image_file::before {
+    content: 'Sekil sec';
+    display: inline-block;
+    color: black;
+    background: #efefef;
+    border: 1px solid #efefef;
+    border-radius: 3px;
+    padding: 5px 8px;
+    text-align: center;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+}
+.settings-wrapper .image_file:hover::before {
+    border-color: #efefef;
+}
+.settings-wrapper .image_file:active::before {
+    background: -webkit-linear-gradient(to top, #e3e3e3, #f9f9f9);
+}
+
+.settings-wrapper .name_change {
+    width: 100%;
+    padding: 5px 8px;
+    font-size: 10pt;
+    font-weight: 700;
+    outline: none;
+    background: #efefef;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+    margin: 5px 0;
+}
+
+.settings-wrapper textarea {
+    min-width: 100%;
+    max-width: 100%;
+    min-height: 150px;
+    max-height: 200px;
+    font-weight: 700;
+    font-size: 11.5pt;
+    padding: 5px;
+    border-radius: 3px;
+    border: 0;
+    color: black;
+}
+
+.settings-wrapper button {
+    padding: 8px 10px;
+    font-size: 16px;
+    color: white;
+    background: #D02E3E;
+    align-items: center;
+    border: 0;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.3s ease;
+    margin-top: 30px;
+}
+@media screen and (max-width: 768px) {
+    .header-comp-1 img {
+        width: 150px;
+    }
+    .header-comp-1 ul {
+        display: none;
+    }
+    .header-comp-2 .user-profile-modal {
+        right: 5px;
+    }
+    .settings-wrapper {
+        padding: 15px;
+    }
+    .change_image_wrapper {
+        width: 320px;
+        align-items: center !important;
+    }
+    .change_image_box, .image_file {
+        width: 320px;
+    }
+}

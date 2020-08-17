@@ -1,0 +1,117 @@
+* {
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+.main-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: url('/img/footer.jpg');
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.warning-modal {
+    width: 100%;
+    display: none;
+    padding: 15px 10px;
+    background: rgba(243, 213, 148, 0.863);
+    border: 1px solid rgb(95, 78, 37);
+    margin-bottom: 15px;
+    border-radius: 3px;
+}
+.warning-modal p {
+    margin: 0;
+    color: rgb(83, 67, 31);
+}
+.form-box {
+    padding: 50px;
+    background: rgb(24, 24, 32);
+    border-radius: 5px;
+}
+.form-box h2 {
+    font-size: 32px;
+    color: white;
+    font-weight: bold;
+    margin: 0 0 20px;
+}
+.form-box input {
+    width: 350px;
+    padding: 15px;
+    font-size: 12pt;
+    font-weight: 700;
+    outline: none;
+    background: #efefef;
+    border-radius: 3px;
+    border: 1px solid #efefef;
+    margin: 5px 0;
+}
+.form-box .password {
+    position: relative;
+}
+.form-box .password i {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    font-size: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.form-box .password i:hover {
+    color: rgb(2, 103, 219);
+    transition: 0.3s ease;
+}
+.form-box ::placeholder {
+    color: black;
+}
+.form-box .forgot-pass {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+.forgot-pass a {
+    text-decoration: none;
+    color: #efefef;
+    font-sizE: 14px;
+}
+button {
+    width: 100%;
+    padding: 15px;
+    background: #D02E3E;
+    color: white;
+    border: 0;
+    outline: none;
+    font-size: 18px;
+    cursor: pointer;
+    margin-bottom: 15px;
+}
+.already-acc {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.already-acc span {
+    color: silver;
+    margin-right: 5px;
+}
+.already-acc a {
+    color: white;
+}
+@media screen and (max-width: 600px) {
+    .form-box {
+        padding: 50px 20px;
+    }
+    .form-box input {
+        width: 300px;
+    }
+}

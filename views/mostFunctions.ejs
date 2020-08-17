@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/mostFunctions.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <!-- config -->
+    <script src="/js/config.js"></script>
+    <script src="/js/moment.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/mostFunctions.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-container">
+        
+        <%- include('../parts/header.ejs') -%>
+
+        <!-- TECHNO NEWS HEADER -->
+        <div class="most_viewed_cover">
+            <div class="most-viewed-header px-0 px-md-5 py-4">
+                <div class="most-viewed-location d-flex align-items-center px-3 mb-4">
+                    <a href="/">Ana Sehife</a>
+                    <i class="fas fa-angle-right"></i>
+                    <span>Videolar</span>
+                </div>
+                <div class="most-viewed-body d-flex flex-column align-items-center px-3">
+                    <div class="most-viewed-text d-flex align-items-center mb-3">
+                        <h2>Videolar</h2>
+                        <div class="most-viewed-circle"></div>
+                    </div>
+                    <select id="most_viewed_select">
+                        <option value="most-voted">Ən çox səs verilən</option>
+                        <a href="/video/?order=most-viewed"><option value="most-viewed">Ən çox baxılan</option></a>
+                        <option value="most-discussed">Ən çox müzakirə olunan</option>
+                        <a href="/video/?order=recent"></option value="recent">Son</option></a>
+                        <option value="featured">Xüsusi</option>
+                        <option value="random">Təsadüfi</option>
+                        <option value="most-shared">Ən çox paylaşılan</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <!-- config -->
+    <script src="/js/config.js"></script>
+    <script src="/js/moment.js"></script>
+    <script src="/js/auth.js"></script>
+    <script src="/js/dashboard.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-container">
+        
+        <%- include('../parts/header.ejs') -%>
+
+        <!-- TRENDING LAYOUT -->
+        <div class="trending-layout">
+            <div class="trend-wrap-1">
+                <div class="trend-1 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mood.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-1-views"></span>
+                        </div>
+                        <h5 id="trend-1-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-1-author"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="trend-2 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mood.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-2-views"></span>
+                        </div>
+                        <h5 id="trend-2-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-2-author"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="trend-wrap-2">
+                <div class="trend-3 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mood.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-3-views"></span>
+                        </div>
+                        <h5 id="trend-3-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-3-author"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="trend-4 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mood.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-4-views"></span>
+                        </div>
+                        <h5 id="trend-4-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-4-author"></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="trend-5 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mood.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-5-views"></span>
+                        </div>
+                        <h5 id="trend-5-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-5-author"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- NEWS -->
+        <div class="news">
+            <div class="row m-0 py-5 px-3 px-lg-5 news_row">
+                <div class="col-12 col-lg-8 p-0 px-lg-3 mb-4" id="news-wrapper">
+                    <!-- ALL NEWS HERE -->
+                </div>
+                <div class="col-12 col-lg-4 p-0 pl-sm-3">
+                    <div class="col-12 p-0 d-flex justify-content-center mb-4">
+                        <img src="https://boombox.px-lab.com/animatrix/wp-content/uploads/sites/9/2016/11/300_dark.png" alt="" class="img-fluid">
+                    </div>
+                    <div class="col-12 p-0 d-flex flex-column align-items-center trending-news-wrapper" id="trending-news-wrapper">
+                        <div class="d-flex justify-content-center align-items-center mb-3">
+                            <i class="fas fa-bolt"></i>
+                            <h2>TRENDING</h2>
+                        </div>
+                        <!-- Right Trend -->
+                        <div class="right-trend col-12 col-sm-6 col-lg-12 p-0">
+
+                        </div>
+                        <div class="social mb-4">
+                            <ul>
+                                <li class="facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </li>
+                                <li class="reddit">
+                                    <i class="fab fa-reddit"></i>
+                                </li>
+                                <li class="youtube">
+                                    <i class="fab fa-youtube"></i>
+                                </li>
+                                <li class="twitch">
+                                    <i class="fab fa-twitch"></i>
+                                </li>
+                                <li class="rss">
+                                    <i class="fas fa-rss"></i>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <!-- SECTIONS -->
+                        <%- include('../parts/sections.ejs') -%>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <%- include('../parts/footer.ejs') -%>
+    </div>
+</body>
+</html>

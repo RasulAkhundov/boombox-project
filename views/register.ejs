@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/register.css">
+    <!-- FONT AWESOME -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <!-- config -->
+    <script src="/js/config.js"></script>
+    <script src="/js/auth.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div class="main-container">
+        <div class="form-box">
+            <h2>Qeydiyyat</h2>
+            <div class="warning-modal">
+                <p>Zehmet olmasa bosluqlari doldurun!</p>
+            </div>
+            <div class="username">
+                <input type="text" placeholder="istifadəçi adınız" id="username" autocomplete="off">
+            </div>
+            <div class="email">
+                <input type="email" placeholder="Elektron poçtunuz" id="email">
+            </div>
+            <div class="password">
+                <input type="password" placeholder="Parolunuz" id="password" style="margin-bottom: 10px;">
+                <i class="far fa-eye" id="password_eye"></i>
+            </div>
+            <div class="forgot-pass">
+                <a href="#">Şifrəni unutmusunuz?</a>
+            </div>
+            <button type="button" id="register">Qeydiyyatdan keçin</button>
+            <div class="already-acc">
+                <span>Artıq hesabınız var?</span>
+                <a href="/login">Daxil ol</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
