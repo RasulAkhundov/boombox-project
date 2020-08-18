@@ -1,5 +1,8 @@
 $(document).ready(async function() {
 
+    if(!localStorage.getItem('user')) {
+        window.location.href = "/"
+    }
     if(window.location.pathname === "/admin-panel") {
         localStorage.removeItem('order');
         localStorage.removeItem('category');

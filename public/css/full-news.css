@@ -139,6 +139,7 @@ header {
     font-size: 16px;
     color: white;
     background: #D02E3E;
+    display: none;
     border: 0;
     margin: 0 15px;
     font-weight: bold;
@@ -152,6 +153,7 @@ header {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: none;
     width: 50px;
     height: 50px;
     border-radius: 50px;
@@ -757,14 +759,14 @@ footer .footer-footer {
 .footer-footer ul li {
     list-style: none;
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
     margin-right: 10px;
     cursor: pointer;
 }
 .footer-footer span {
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
 }
 

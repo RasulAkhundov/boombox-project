@@ -143,6 +143,7 @@ $(document).ready(async function() {
             console.log(comment);
         });
     } else {
+        $("#dash-login-btn").css("display", "flex");
         $('.write-comment').css('display', 'none');
         $('.comment-without-login').css('display', 'flex');
     }

@@ -84,10 +84,24 @@ router.get("/news/:id", (req, res) => {
 });
 
 ///ALL NEWS GET FUNCTION
+router.get("/all-news", (req, res) => {
+    AllNews.find()
+    .sort({ date: -1 })
+    .then(allNews => {
+        if(!allNews) {
+            console.log("error from get all news length")
+        } else {
+            res.status(200).json({ allNews });
+        }
+    })
+});
 router.get("/get-all-news", (req, res) => {
-    AllNews.find({}, (err, allNews) => {
-        if(err) {
-            console.log("error from allnews api");
+    AllNews.find()
+    .sort({ date: -1 })
+    .limit(5)
+    .then(allNews => {
+        if(!allNews) {
+            console.log("error from get all news")
         } else {
             res.status(200).json({ allNews });
         }
@@ -136,7 +150,7 @@ router.get("/get-trend-news", (req, res) => {
 //RIGHT TREND NEWS GETTING
 router.get("/right-trend", (req, res) => {
     AllNews.find()
-    .sort({ _id: -1 })
+    .sort({ pageViews: -1 })
     .limit(5)
     .then(rightTrend => {
         if(!rightTrend) {
@@ -211,8 +225,12 @@ router.put("/update-page-views/:id", (req, res) => {
 
 /// MORE FROM HASHTAG /////
 router.get('/more-from/:hashtag1', (req, res) => {
-    AllNews.find({ hashtag1: req.params.hashtag1 })
-    .sort({ hashtag1: 1 })
+    AllNews.find({
+        $or: [
+            { hashtag1: req.params.hashtag1 },
+            { hashtag2: req.params.hashtag1 }
+        ]
+    })
     .limit(3)
     .then(moreFrom => {
         if(!moreFrom) {
@@ -223,28 +241,18 @@ router.get('/more-from/:hashtag1', (req, res) => {
     })
 })
 
-///MOST FUNCTION FOR VIDEO
-router.get("/category/:hashtag1", (req, res) => {
-
-    AllNews.find({ hashtag1: req.params.hashtag1 })
-    .sort({ hashtag1: 1 })
-    .then(categoryHashtag => {
-        if(!categoryHashtag) {
-            console.log("error from category hashtag");
-        } else {
-            res.status(200).json({ categoryHashtag });
-        }
-    })
-    
-})
-
 ///CATEGORY FILTERING 
 router.get('/category-:hashtag1', (req, res) => {
 
     let order = req.query.order;
 
     if(order === "most-viewed") {
-        AllNews.find({ hashtag1: req.params.hashtag1 })
+        AllNews.find({
+            $or: [
+                { hashtag1: req.params.hashtag1 },
+                { hashtag2: req.params.hashtag1 }
+            ]
+        })
         .sort({ pageViews: -1 })
         .then(categoryOrder => {
             if(!categoryOrder) {
@@ -254,7 +262,12 @@ router.get('/category-:hashtag1', (req, res) => {
             }
         })
     } else if(order === "new") {
-        AllNews.find({ hashtag1: req.params.hashtag1 })
+        AllNews.find({
+            $or: [
+                { hashtag1: req.params.hashtag1 },
+                { hashtag2: req.params.hashtag1 }
+            ]
+        })
         .sort({ _id: -1 })
         .then(categoryOrder => {
             if(!categoryOrder) {
@@ -264,7 +277,12 @@ router.get('/category-:hashtag1', (req, res) => {
             }
         })
     } else if(order === "old") {
-        AllNews.find({ hashtag1: req.params.hashtag1 })
+        AllNews.find({
+            $or: [
+                { hashtag1: req.params.hashtag1 },
+                { hashtag2: req.params.hashtag1 }
+            ]
+        })
         .sort({ _id: 1 })
         .then(categoryOrder => {
             if(!categoryOrder) {
@@ -274,7 +292,12 @@ router.get('/category-:hashtag1', (req, res) => {
             }
         })
     } else if(order === "featured") {
-        AllNews.find({ hashtag1: req.params.hashtag1 })
+        AllNews.find({
+            $or: [
+                { hashtag1: req.params.hashtag1 },
+                { hashtag2: req.params.hashtag1 }
+            ]
+        })
         .sort({ pageViews: -1 })
         .limit(3)
         .then(categoryOrder => {
@@ -285,6 +308,25 @@ router.get('/category-:hashtag1', (req, res) => {
             }
         })
     }
+});
+
+////////////////////////////////
+////// NEWS PAGINATION ////////
+//////////////////////////////
+router.get('/news', (req, res) => {
+    let page = req.query.page;
+    let limit = 5;
+
+    AllNews.find()
+    .limit(page * limit)
+    .sort({ date: -1 })
+    .then(newsPagination => {
+        if(!newsPagination) {
+            console.log("error from news pagination");
+        } else {
+            res.status(200).json({ newsPagination });
+        }
+    })
 })
  
 module.exports = router;

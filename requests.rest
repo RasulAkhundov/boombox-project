@@ -1,1 +1,1 @@
-GET http://192.168.1.102:4000/api/category-Oyun/?order=most-viewed
+GET http://192.168.1.102:4000/api/news?page=3

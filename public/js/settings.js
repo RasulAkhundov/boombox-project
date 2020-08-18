@@ -1,5 +1,8 @@
 $(document).ready(function() {
 
+    if(!localStorage.getItem('user')) {
+        window.location.href = "/"
+    }
     if(window.location.pathname === "/settings") {
         localStorage.removeItem('order');
         localStorage.removeItem('category');

@@ -1,11 +1,21 @@
 $(document).ready(async function() {
 
+    //MAIN TRENDI DUZELT TECILI
+    //HERSEYI TEST ELE
+    //BUTUN XEBERLERIN HASHTAGINE HREF QOY
+    //DAVAY MEN YATDIM GECEN XEYRE
+
     if(window.location.pathname === "/") {
         localStorage.removeItem('order');
         localStorage.removeItem('category');
     }
 
-    //GETTING TECHNO NEWS
+    /////////////////////////
+    //// NEWS PAGINATION ///
+    ///////////////////////
+    let limit = 1;
+
+    //GETTING ALL NEWS
     let allNews = await axios
     .get(`${window.development}/api/get-all-news`)
     .then(res => res.data.allNews);
@@ -52,13 +62,97 @@ $(document).ready(async function() {
             </div>
         `)
     });
+    if(limit >= 1) {
+        $("#load-more-btn").click(function() {
+            $(".load-more-btn-img").css("display", 'flex');
+            setTimeout(async () => {
+                $(".load-more-btn-img").css("display", 'none');
+                limit += 1;
+                $(".news-box").remove();
+                let newsPagination = await axios
+                .get(`${window.development}/api/news?page=${limit}`)
+                .then(res => res.data.newsPagination);
+
+                newsPagination.map(n => {
+                    $("#news-wrapper").append(`
+                        <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box" style="background: #1D1E29;">
+                            <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29; height: 200px;">
+                                <img src="${n.image}" data-id="${n._id}" alt="" style="border-radius: 5px 0 0 5px;">
+                                <div class="news-emoji">
+                                    <div class="emoji-1 emoji-box">
+                                        <img src="/emotion-img/${n.hashtag1}.svg" class="emoji-1-img" alt="">
+                                    </div>
+                                    <div class="emoji-2 emoji-box">
+                                        <img src="/emotion-img/${n.hashtag2}.svg" class="emoji-2-img" alt="">
+                                    </div>
+                                </div>
+                                <div class="news-view-count d-flex align-items-center">
+                                    <i class="far fa-eye"></i>
+                                    <span>${n.pageViews}</span>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
+                                <div class="hashtag">
+                                    <a href="#">${n.hashtag1}</a>
+                                    <a href="#">${n.hashtag2}</a>
+                                </div>
+                                <div class="news-header">
+                                    <h5 id="news-header" data-id="${n._id}">${n.newsHeader}</h5>
+                                </div>
+                                <div class="news-author d-flex">
+                                    <div class="author-avatar">
+                                        <img src="${n.authorImage}" alt="">
+                                    </div>
+                                    By
+                                    <div class="author-name">
+                                        <a href="#">${n.authorName}</a>
+                                    </div>
+                                    <div class="news-date">
+                                        <span>${moment(`${n.date}`).fromNow()}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+                });
+                ////CLOSING LOAD MORE BUTTON
+                let allNewsLength = await axios.get(`${window.development}/api/all-news`).then(res => res.data.allNews);
+                if(allNews.length * limit >= allNewsLength.length) {
+                    $("#load-more-btn").css("display", "none");
+                }
+            }, 3000);
+        });
+    }
+
+
+    //RIGHT TREND APPEND
+    let rightTrend = await axios
+    .get(`${window.development}/api/right-trend`)
+    .then(res => res.data.rightTrend);
+    
+    rightTrend.map((r, i) => {
+        $(".right-trend").append(`
+            <div class="col-12 p-0 d-flex flex-column mb-3" id="right-news" data-id="${r._id}">
+                <div class="img" style="background-image: url(${r.image});">
+                    <h2 class="number">${i + 1}</h2>
+                </div>
+                <span>${r.newsHeader}</span>
+            </div>
+        `)
+    });
 
     //MAIN TREND APPENDING
-    let mainTrend1 = allNews[allNews.length - 1];
-    let mainTrend2 = allNews[allNews.length - 2];
-    let mainTrend3 = allNews[allNews.length - 3];
-    let mainTrend4 = allNews[allNews.length - 4];
-    let mainTrend5 = allNews[allNews.length - 5];
+    let allNewsForMainTrend = await axios.get(`${window.development}/api/all-news`).then(res => res.data.allNews);
+    ///////////////////////////////
+    //  BURANI DUZELT //
+    ///////////////////////////
+    let mainTrend1 = allNewsForMainTrend[allNewsForMainTrend.length - 5];
+    let mainTrend2 = allNewsForMainTrend[allNewsForMainTrend.length - 4];
+    let mainTrend3 = allNewsForMainTrend[allNewsForMainTrend.length - 3];
+    let mainTrend4 = allNewsForMainTrend[allNewsForMainTrend.length - 2];
+    let mainTrend5 = allNewsForMainTrend[allNewsForMainTrend.length - 1];
+
+    console.log(allNewsForMainTrend);
 
     //First trend
     $('.trend-1 .emoji-1-img').attr('src', `/emotion-img/${mainTrend1.hashtag1}.svg`);
@@ -100,23 +194,7 @@ $(document).ready(async function() {
     $("#trend-5-header").text(mainTrend5.newsHeader);
     $("#trend-5-author").text(mainTrend5.authorName);
     $("#trend-5-views").text(mainTrend5.pageViews);
-    
 
-    //RIGHT TREND APPEND
-    let rightTrend = await axios
-    .get(`${window.development}/api/right-trend`)
-    .then(res => res.data.rightTrend);
-    
-    rightTrend.map((r, i) => {
-        $(".right-trend").append(`
-            <div class="col-12 p-0 d-flex flex-column mb-3" id="right-news" data-id="${r._id}">
-                <div class="img" style="background-image: url(${r.image});">
-                    <h2 class="number">${i + 1}</h2>
-                </div>
-                <span>${r.newsHeader}</span>
-            </div>
-        `)
-    })
 
     //GETTING USER INFORMATION FROM LOCAL STORAGE
     let tokenMe = localStorage.getItem('user');
@@ -149,6 +227,8 @@ $(document).ready(async function() {
                 userProfileToggle = false;
             }
         });
+    } else {
+        $("#dash-login-btn").css("display", "flex");
     }
 
     //Main trend link
@@ -194,7 +274,8 @@ $(document).ready(async function() {
             val: $(this).data('section-val')
         }
         localStorage.setItem('category', JSON.stringify(sectionVal));
-    })
+    });
+
 });
 // jwt parse
 function parseJwt(token) {

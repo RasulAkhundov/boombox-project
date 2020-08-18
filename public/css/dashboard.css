@@ -72,11 +72,15 @@ header {
     color: white;
     cursor: pointer;
 }
+.header-comp-2 a {
+    text-decoration: none;
+}
 .header-comp-2 #dash-login-btn {
     padding: 8px 10px;
     font-size: 16px;
     color: white;
     background: #D02E3E;
+    display: none;
     border: 0;
     margin: 0 15px;
     font-weight: bold;
@@ -90,6 +94,7 @@ header {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: none;
     width: 50px;
     height: 50px;
     border-radius: 50px;
@@ -318,10 +323,10 @@ header {
     font-weight: 400;
     margin: 0 5px;
 }
-#news-wrapper {
+#news-wrapper-cover {
     height: 100%;
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
 }
 .news-img-box {
     position: relative;
@@ -372,6 +377,26 @@ header {
     font-size: 14px;
     color: #efefef;
 }
+/* NEWS LOAD MORE BUTTON */
+.load-more-btn {
+    padding: 5px 30px;
+    background: transparent;
+    border: 5px solid #292c3b;
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    color: #efefef;
+    outline: none !important;
+    transition: 0.3s ease;
+}
+.load-more-btn:hover {
+    border: 5px solid #D02E3E;
+}
+.load-more-btn-img {
+    width: 30px;
+    height: 30px;
+    display: none;
+}
 
 /* TRENDING NEWS WRAPPER */
 .trending-news-wrapper {
@@ -416,6 +441,7 @@ header {
     font-size: 16px;
     font-weight: bold;
     color: #efefef;
+    font-family: 'Rajdhani', sans-serif;
     padding: 5px;
     transition: 0.3s ease;
     -webkit-touch-callout: none;

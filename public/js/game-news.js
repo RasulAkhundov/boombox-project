@@ -92,6 +92,8 @@ $(document).ready(async function() {
                 userProfileToggle = false;
             }
         });
+    } else {
+        $("#dash-login-btn").css("display", "flex");
     }
 
     //ALL NEWS APPEND

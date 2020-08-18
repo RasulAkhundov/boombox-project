@@ -35,6 +35,8 @@ $(document).ready(async function() {
                 userProfileToggle = false;
             }
         });
+    } else {
+        $("#dash-login-btn").css("display", "flex");
     }
 
     ////NEWS FILTERING SELECT OPENING AND CLOSING
@@ -97,10 +99,11 @@ $(document).ready(async function() {
         let categoryOrder = await axios
         .get(`${window.development}/api/category-${sectionVal.name}?order=${order.val}`)
         .then(res => res.data.categoryOrder)
+        console.log(categoryOrder);
 
         categoryOrder.map(c => {
             $("#category-news-row").append(`
-                <div class="col-12 col-sm-6 col-lg-4 p-2 full-news-box-cover">
+                <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 full-news-box-cover">
                     <div class="col-12 p-0 full-news-box" style="background: #1D1E29; border-radius: 5px;">
                         <div class="col-12 p-0 full-news-img-box" style="background: #1D1E29; height: 200px;">
                             <img src="${c.image}" data-id="${c._id}" alt="">
@@ -149,11 +152,12 @@ $(document).ready(async function() {
         ///CATEGORY APPENDING FOR ORDER
         let categoryOrder = await axios
         .get(`${window.development}/api/category-${sectionVal.name}?order=new`)
-        .then(res => res.data.categoryOrder)
+        .then(res => res.data.categoryOrder);
+        console.log(categoryOrder);
 
         categoryOrder.map(c => {
             $("#category-news-row").append(`
-                <div class="col-12 col-sm-6 col-lg-4 p-2 full-news-box-cover">
+                <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 full-news-box-cover">
                     <div class="col-12 p-0 full-news-box" style="background: #1D1E29; border-radius: 5px;">
                         <div class="col-12 p-0 full-news-img-box" style="background: #1D1E29; height: 200px;">
                             <img src="${c.image}" data-id="${c._id}" alt="">
@@ -199,6 +203,23 @@ $(document).ready(async function() {
             `)
         })
     }
+
+    //News header text link
+    let allNews = await axios
+    .get(`${window.development}/api/get-all-news`)
+    .then(res => res.data.allNews);
+    
+    let formData = {};
+    $(document).on('click', '.full-news-box img, #full-news-header', async function() {
+        let id = $(this).data('id');
+        localStorage.setItem('newsID', id);
+
+        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
+    
+        await axios
+        .put(`${window.development}/api/update-page-views/${id}`, formData)
+        window.location.href = `/news/${id}`;
+    });
 });
 // jwt parse
 function parseJwt(token) {
