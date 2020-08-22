@@ -20,8 +20,8 @@ $(document).ready(async function() {
             </div>
                 <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
                     <div class="hashtag">
-                        <a href="#">${t.hashtag1}</a>
-                        <a href="#">${t.hashtag2}</a>
+                        <a id="hashtag-1">${t.hashtag1}</a>
+                        <a id="hashtag-2">${t.hashtag2}</a>
                     </div>
                     <div class="news-header">
                         <h5 id="news-header" data-id="${t._id}">${t.newsHeader}</h5>
@@ -35,7 +35,7 @@ $(document).ready(async function() {
                             <a href="#">${t.authorName}</a>
                         </div>
                         <div class="news-date">
-                            <span>${moment(`${t.date}`).fromNow()}</span>
+                            <span>${moment(`${t.date}`).locale('az').fromNow()}</span>
                         </div>
                     </div>
                 </div>
@@ -64,9 +64,11 @@ $(document).ready(async function() {
     let tokenMe = localStorage.getItem('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
-        let user = userData.usr;
-        let userName = user.username;
-        let userImage = user.image;
+
+        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+
+        let userName = userMe.username;
+        let userImage = userMe.image;
     
         let userProfileToggle = false;
         //user profile image gives
@@ -123,6 +125,33 @@ $(document).ready(async function() {
         .put(`${window.development}/api/update-page-views/${id}`, formData)
         window.location.href = `/news/${id}`;
     });
+
+    ///SECTION LINK///
+    $(".sections-li").click(function() {
+        let sectionVal = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(sectionVal));
+    });
+
+    ///NEWS HASHTAG 1 LINK GIVING
+    $(document).on('click', '#hashtag-1', function() {
+        let hashtag1 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag1}`;
+        let hashtag1Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+    });
+    ///NEWS HASHTAG 2 LINK GIVING
+    $(document).on('click', '#hashtag-2', function() {
+        let hashtag2 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag2}`;
+        let hashtag2Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+    })
 
 });
 // jwt parse

@@ -195,7 +195,7 @@ header {
 }
 .techno-news-body .buttons button {
     padding: 8px 5px;
-    font-size: 16px;
+    font-size: 14px;
     color: white;
     background: transparent;
     align-items: center;
@@ -261,8 +261,16 @@ header {
 }
 .news-box .hashtag a {
     font-size: 14px;
-    color: #8c8d8f;
+    color: #8c8d8f !important;
+    text-decoration: #8c8d8f;
+    cursor: pointer;
     font-weight: 400;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .news-box .news-header {
     border-bottom: 1px solid #292c3b;
@@ -418,6 +426,9 @@ header {
     padding: 0;
     width: 100%;
 }
+.sections ul a {
+    text-decoration: none;
+}
 .sections ul li {
     padding: 10px 10px 10px 0;
     list-style: none;
@@ -485,14 +496,14 @@ footer .footer-footer {
 .footer-footer ul li {
     list-style: none;
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
     margin-right: 10px;
     cursor: pointer;
 }
 .footer-footer span {
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
 }
 

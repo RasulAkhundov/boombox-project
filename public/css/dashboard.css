@@ -280,8 +280,15 @@ header {
 }
 .news-box .hashtag a {
     font-size: 14px;
-    color: #8c8d8f;
+    color: #8c8d8f !important;
     font-weight: 400;
+    cursor: pointer;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 .news-box .news-header {
     border-bottom: 1px solid #292c3b;
@@ -577,14 +584,14 @@ footer .footer-footer {
 .footer-footer ul li {
     list-style: none;
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
     margin-right: 10px;
     cursor: pointer;
 }
 .footer-footer span {
     color: #efefef;
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 400;
 }
 

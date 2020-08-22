@@ -1,12 +1,13 @@
-$(document).ready(function() {
+$(document).ready(async function() {
     let tokenMe = localStorage.getItem('user');
 
     if(tokenMe) {
-        const me = parseJwt(tokenMe);
-        let emailCheck = me.usr;
+        const userData = parseJwt(tokenMe);
+        
+        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
 
         //cheking admin profile
-        if(emailCheck.email === "resul.axundov2002@mail.ru") {
+        if(userMe.email === "resul.axundov2002@mail.ru") {
             $("#create").css("display", "flex");
             $("#user-profile-username").css("border", "0");
         } else {

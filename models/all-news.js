@@ -20,8 +20,7 @@ const schema = new mongoose.Schema({
             commentDate: { type: Date, default: Date.now() }
         }
     ],
-    pageViews: { type: Number, default: 0 },
-    like: { type: Number, default: 0 }
+    pageViews: { type: Number, default: 0 }
 });
 
 let AllNews = mongoose.model("AllNews", schema)

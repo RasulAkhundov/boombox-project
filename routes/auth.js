@@ -23,7 +23,7 @@ const upload = multer({
     dest: "public/upload/user-avatar/",
     filterFile,
     limits: {
-        fileSize: 2000000
+        fileSize: 3000000
     }
 });
 
@@ -66,13 +66,25 @@ router.post("/login", async (req, res) => {
             if(user.checkPassword(password)) {
                 res.json({ user: user.generateJWT() });
             } else {
-                res.status(422).json({ errors: 'password not match' });
+                res.status(434).json({ errors: 'password not match'})
             }
         } else {
-            res.status(422).json({ errors: 'email not found' });
+            res.status(434).json({ errors: 'email not found'})
         }
     });
 });
+
+//user get
+router.get('/user/:id', (req, res) => {
+    User.findById(req.params.id)
+    .then(userInfo => {
+        if(!userInfo) {
+            console.log("error from getting user ME")
+        } else {
+            res.status(200).json({ userInfo });
+        }
+    })
+})
 
 router.put('/settings/profile-update/:id', upload.single('image'), async (req, res) => {
     const { id } = req.params;

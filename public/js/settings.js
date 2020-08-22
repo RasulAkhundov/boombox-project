@@ -1,4 +1,4 @@
-$(document).ready(function() {
+$(document).ready(async function() {
 
     if(!localStorage.getItem('user')) {
         window.location.href = "/"
@@ -12,10 +12,12 @@ $(document).ready(function() {
     //GETTING USER INFORMATION FROM LOCAL STORAGE
     let tokenMe = localStorage.getItem('user');
     let userData = parseJwt(tokenMe);
-    let user = userData.usr;
-    let userName = user.username;
-    let userImage = user.image;
-    let userBio = user.bio;
+
+    let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+
+    let userName = userMe.username;
+    let userImage = userMe.image;
+    let userBio = userMe.bio;
     
     let userProfileToggle = false;
     //user profile image gives
@@ -42,7 +44,7 @@ $(document).ready(function() {
     });
 
     //update img default src
-    $("#user_profile_image").attr('src', `${userImage}`);
+    $("#user_profile_image").css('background-image', `url(${userImage})`);
     $("#name-change").val(`${userName}`);
     $("#bioqrafia").val(`${userBio}`);
 
@@ -57,7 +59,7 @@ $(document).ready(function() {
         fdata.append('bio', $("#bioqrafia").val() || userBio);
 
         let usr = await axios
-        .put(`/api/settings/profile-update/${user._id}`, fdata)
+        .put(`/api/settings/profile-update/${userData.usr._id}`, fdata)
         .then(res => res.data.user)
 
         localStorage.setItem('user', usr);

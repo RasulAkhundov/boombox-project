@@ -8,7 +8,7 @@ const fs = require("fs");
 const router = express.Router();
 
 router.post("/post-all-news", (req, res) => {
-    const { mainContentName, image, newsHeader, newsDescription, hashtag1, hashtag2, authorImage, authorName, date } = req.body;
+    const { mainContentName, image, newsHeader, newsDescription, hashtag1, hashtag2, authorImage, authorName, authorBio, date } = req.body;
 
     let parts = image.split(";");
     let mimType = parts[0].split(":")[1];
@@ -33,6 +33,7 @@ router.post("/post-all-news", (req, res) => {
             hashtag2,
             authorImage,
             authorName,
+            authorBio,
             date,
         });
         allNews
@@ -84,24 +85,12 @@ router.get("/news/:id", (req, res) => {
 });
 
 ///ALL NEWS GET FUNCTION
-router.get("/all-news", (req, res) => {
+router.get("/get-all-news", (req, res) => {
     AllNews.find()
-    .sort({ date: -1 })
+    .sort({ _id: -1 })
     .then(allNews => {
         if(!allNews) {
             console.log("error from get all news length")
-        } else {
-            res.status(200).json({ allNews });
-        }
-    })
-});
-router.get("/get-all-news", (req, res) => {
-    AllNews.find()
-    .sort({ date: -1 })
-    .limit(5)
-    .then(allNews => {
-        if(!allNews) {
-            console.log("error from get all news")
         } else {
             res.status(200).json({ allNews });
         }
@@ -195,6 +184,7 @@ router.get('/next/:id', (req, res) => {
 router.delete("/delete-news/:id", (req, res) => {
     const { id } = req.params;
     const { image } = req.body;
+    console.log(image);
     AllNews.findByIdAndDelete({ _id: id }, err => {
         if(err) {
             console.log("error from deleted news")
@@ -246,7 +236,7 @@ router.get('/category-:hashtag1', (req, res) => {
 
     let order = req.query.order;
 
-    if(order === "most-viewed") {
+    if(order === "en-cox-baxilan") {
         AllNews.find({
             $or: [
                 { hashtag1: req.params.hashtag1 },
@@ -261,7 +251,7 @@ router.get('/category-:hashtag1', (req, res) => {
                 res.status(200).json({ categoryOrder });
             }
         })
-    } else if(order === "new") {
+    } else if(order === "en-yeni") {
         AllNews.find({
             $or: [
                 { hashtag1: req.params.hashtag1 },
@@ -276,7 +266,7 @@ router.get('/category-:hashtag1', (req, res) => {
                 res.status(200).json({ categoryOrder });
             }
         })
-    } else if(order === "old") {
+    } else if(order === "en-kohne") {
         AllNews.find({
             $or: [
                 { hashtag1: req.params.hashtag1 },
@@ -291,7 +281,7 @@ router.get('/category-:hashtag1', (req, res) => {
                 res.status(200).json({ categoryOrder });
             }
         })
-    } else if(order === "featured") {
+    } else if(order === "xususi") {
         AllNews.find({
             $or: [
                 { hashtag1: req.params.hashtag1 },
@@ -315,7 +305,7 @@ router.get('/category-:hashtag1', (req, res) => {
 //////////////////////////////
 router.get('/news', (req, res) => {
     let page = req.query.page;
-    let limit = 5;
+    let limit = 2;
 
     AllNews.find()
     .limit(page * limit)

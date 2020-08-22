@@ -53,7 +53,7 @@ $(document).ready(async function() {
     $("#news-image").attr('src', `${fullNews.image}`);
     $("#author-name, #about-author-name").text(`${fullNews.authorName}`);
     $("#news-name-location").text(`${fullNews.newsHeader}`);
-    $("#news-adding-time").text(`${moment(fullNews.date).fromNow()}`);
+    $("#news-adding-time").text(`${moment(fullNews.date).locale('az').fromNow()}`);
 
     //////GETTING COMMENT///////
     $("#comment-count, #news-authour-comment-count").text(`${fullNews.comments.length} Serh:`);
@@ -65,7 +65,7 @@ $(document).ready(async function() {
                 <div class="comment-body">
                     <div class="comment-name">
                         <a href="#" id="comment-name">${c.commentName}</a>
-                        <p id="comment-time">${moment(c.commentDate).fromNow()}</p>
+                        <p id="comment-time">${moment(c.commentDate).locale('az').fromNow()}</p>
                     </div>
                     <div class="comment-description">
                         <p id="comment-description">${c.commentText}</p>
@@ -87,9 +87,12 @@ $(document).ready(async function() {
     let tokenMe = localStorage.getItem('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
-        let user = userData.usr;
-        let userName = user.username;
-        let userImage = user.image;
+
+        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+        console.log(userMe);
+
+        let userName = userMe.username;
+        let userImage = userMe.image;
         
         let userProfileToggle = false;
         //user profile image gives
@@ -267,7 +270,7 @@ $(document).ready(async function() {
                             <a href="#">${m.authorName}</a>
                         </div>
                         <div class="full-news-date">
-                            <span>${moment(`${m.date}`).fromNow()}</span>
+                            <span>${moment(`${m.date}`).locale('az').fromNow()}</span>
                         </div>
                     </div>
                 </div>

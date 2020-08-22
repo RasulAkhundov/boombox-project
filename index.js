@@ -25,6 +25,7 @@ app.use(cors());
 app.use(
     session({ 
         secret: 'secret',
+        cookie: { maxAge: 60000 },
         resave: false,
         saveUninitialized: true
     })
@@ -33,8 +34,7 @@ app.use(
 //flash
 app.use(flash());
 
-//global vars
-
+//global varss
 
 //router init
 app.use("/api", authRouter);

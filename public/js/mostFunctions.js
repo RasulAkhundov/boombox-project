@@ -8,9 +8,11 @@ $(document).ready(async function() {
     let tokenMe = localStorage.getItem('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
-        let user = userData.usr;
-        let userName = user.username;
-        let userImage = user.image;
+        
+        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+
+        let userName = userMe.username;
+        let userImage = userMe.image;
 
         let userProfileToggle = false;
         //user profile image gives
@@ -65,8 +67,7 @@ $(document).ready(async function() {
     //CATEGORY HASHTAG FILTERING WITH SELECT
     $(".category_option").click(function() {
         let order = {
-            name: $(this).data('order-name'),
-            val: $(this).data('order-val')
+            name: $(this).data('order-name')
         }
 
         localStorage.setItem('order', JSON.stringify(order));
@@ -77,10 +78,10 @@ $(document).ready(async function() {
 
     $("#category_location, #category_header_h2").text(`${sectionVal.name}`);
 
-    $(".most-viewed").attr('href', `/category-${sectionVal.val.toLowerCase()}?order=most-viewed`);
-    $(".new").attr('href', `/category-${sectionVal.val.toLowerCase()}?order=new`);
-    $(".featured").attr('href', `/category-${sectionVal.val.toLowerCase()}?order=featured`);
-    $(".old").attr('href', `/category-${sectionVal.val.toLowerCase()}?order=old`);
+    $(".most-viewed").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=en-cox-baxilan`);
+    $(".new").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=yeni`);
+    $(".featured").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=xususi`);
+    $(".old").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=en-kohne`);
 
     ///APPENDING HASHTAG CATEGORY///
     
@@ -91,15 +92,22 @@ $(document).ready(async function() {
         if(!order.name) {
             $("#category_text").text('Ən yeni');
         } else {
-            $("#category_text").text(order.name);
+            if(order.name === "en-yeni") {
+                $("#category_text").text('Ən yeni');
+            } else if(order.name === "en-cox-baxilan") {
+                $("#category_text").text('Ən cox baxılan');
+            } else if(order.name === "xususi") {
+                $("#category_text").text('Xüsusi');
+            } else if(order.name === "en-kohne") {
+                $("#category_text").text('Ən köhnə');
+            }
         }
         $(`.category_options ${order.name}`).css('background', '#292c3b');
 
         ///CATEGORY APPENDING FOR ORDER
         let categoryOrder = await axios
-        .get(`${window.development}/api/category-${sectionVal.name}?order=${order.val}`)
-        .then(res => res.data.categoryOrder)
-        console.log(categoryOrder);
+        .get(`${window.development}/api/category-${sectionVal.name}?order=${order.name}`)
+        .then(res => res.data.categoryOrder);
 
         categoryOrder.map(c => {
             $("#category-news-row").append(`
@@ -122,8 +130,8 @@ $(document).ready(async function() {
                         </div>
                         <div class="col-12 py-3 px-4" style="background: #1D1E29;">
                             <div class="full-news-hashtag">
-                                <a href="#">${c.hashtag1}</a>
-                                <a href="#">${c.hashtag2}</a>
+                                <a href="#" id="hashtag-1">${c.hashtag1}</a>
+                                <a href="#" id="hashtag-2">${c.hashtag2}</a>
                             </div>
                             <div class="full-news-header">
                                 <h5 id="full-news-header" data-id="${c._id}">${c.newsHeader}</h5>
@@ -140,7 +148,7 @@ $(document).ready(async function() {
                                     <a href="#">${c.authorName}</a>
                                 </div>
                                 <div class="full-news-date">
-                                    <span>${moment(`${c.date}`).fromNow()}</span>
+                                    <span>${moment(`${c.date}`).locale('az').fromNow()}</span>
                                 </div>
                             </div>
                         </div>
@@ -151,9 +159,8 @@ $(document).ready(async function() {
     } else {
         ///CATEGORY APPENDING FOR ORDER
         let categoryOrder = await axios
-        .get(`${window.development}/api/category-${sectionVal.name}?order=new`)
+        .get(`${window.development}/api/category-${sectionVal.name}?order=en-yeni`)
         .then(res => res.data.categoryOrder);
-        console.log(categoryOrder);
 
         categoryOrder.map(c => {
             $("#category-news-row").append(`
@@ -176,8 +183,8 @@ $(document).ready(async function() {
                         </div>
                         <div class="col-12 py-3 px-4" style="background: #1D1E29;">
                             <div class="full-news-hashtag">
-                                <a href="#">${c.hashtag1}</a>
-                                <a href="#">${c.hashtag2}</a>
+                                <a href="#" id="hashtag-1">${c.hashtag1}</a>
+                                <a href="#" id="hashtag-2">${c.hashtag2}</a>
                             </div>
                             <div class="full-news-header">
                                 <h5 id="full-news-header" data-id="${c._id}">${c.newsHeader}</h5>
@@ -194,7 +201,7 @@ $(document).ready(async function() {
                                     <a href="#">${c.authorName}</a>
                                 </div>
                                 <div class="full-news-date">
-                                    <span>${moment(`${c.date}`).fromNow()}</span>
+                                    <span>${moment(`${c.date}`).locale('az').fromNow()}</span>
                                 </div>
                             </div>
                         </div>
@@ -220,6 +227,26 @@ $(document).ready(async function() {
         .put(`${window.development}/api/update-page-views/${id}`, formData)
         window.location.href = `/news/${id}`;
     });
+    
+    ///NEWS HASHTAG 1 LINK GIVING
+    $(document).on('click', '#hashtag-1', function() {
+        let hashtag1 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag1}`;
+        let hashtag1Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+    });
+    ///NEWS HASHTAG 2 LINK GIVING
+    $(document).on('click', '#hashtag-2', function() {
+        let hashtag2 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag2}`;
+        let hashtag2Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+    })
+
 });
 // jwt parse
 function parseJwt(token) {

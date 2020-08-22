@@ -1,10 +1,5 @@
 $(document).ready(async function() {
 
-    //MAIN TRENDI DUZELT TECILI
-    //HERSEYI TEST ELE
-    //BUTUN XEBERLERIN HASHTAGINE HREF QOY
-    //DAVAY MEN YATDIM GECEN XEYRE
-
     if(window.location.pathname === "/") {
         localStorage.removeItem('order');
         localStorage.removeItem('category');
@@ -13,14 +8,11 @@ $(document).ready(async function() {
     /////////////////////////
     //// NEWS PAGINATION ///
     ///////////////////////
-    let limit = 1;
-
-    //GETTING ALL NEWS
-    let allNews = await axios
+    let getAllNews = await axios
     .get(`${window.development}/api/get-all-news`)
     .then(res => res.data.allNews);
 
-    allNews.map(a => {
+    getAllNews.map(a => {
         $("#news-wrapper").append(`
             <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box" style="background: #1D1E29;">
                 <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29; height: 200px;">
@@ -40,11 +32,11 @@ $(document).ready(async function() {
                 </div>
                 <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
                     <div class="hashtag">
-                        <a href="#">${a.hashtag1}</a>
-                        <a href="#">${a.hashtag2}</a>
+                        <a href="#" id="hashtag-1">${a.hashtag1}</a>
+                        <a href="#" id="hashtag-2">${a.hashtag2}</a>
                     </div>
                     <div class="news-header">
-                        <h5 id="news-header" data-id="${a._id}" data-header-text="${a.newsHeader}" data-description-text="${a.newsDescription}" data-name="${a.authorName}" data-author-image="${a.authorImage}" data-news-image="${a.image}" data-hashtag1="${a.hashtag1}" data-hashtag2="${a.hashtag2}" data-news-date="${a.date}">${a.newsHeader}</h5>
+                        <h5 id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
                     </div>
                     <div class="news-author d-flex">
                         <div class="author-avatar">
@@ -55,75 +47,13 @@ $(document).ready(async function() {
                             <a href="#">${a.authorName}</a>
                         </div>
                         <div class="news-date">
-                            <span>${moment(`${a.date}`).fromNow()}</span>
+                            <span>${moment(`${a.date}`).locale('az').fromNow()}</span>
                         </div>
                     </div>
                 </div>
             </div>
         `)
     });
-    if(limit >= 1) {
-        $("#load-more-btn").click(function() {
-            $(".load-more-btn-img").css("display", 'flex');
-            setTimeout(async () => {
-                $(".load-more-btn-img").css("display", 'none');
-                limit += 1;
-                $(".news-box").remove();
-                let newsPagination = await axios
-                .get(`${window.development}/api/news?page=${limit}`)
-                .then(res => res.data.newsPagination);
-
-                newsPagination.map(n => {
-                    $("#news-wrapper").append(`
-                        <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box" style="background: #1D1E29;">
-                            <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29; height: 200px;">
-                                <img src="${n.image}" data-id="${n._id}" alt="" style="border-radius: 5px 0 0 5px;">
-                                <div class="news-emoji">
-                                    <div class="emoji-1 emoji-box">
-                                        <img src="/emotion-img/${n.hashtag1}.svg" class="emoji-1-img" alt="">
-                                    </div>
-                                    <div class="emoji-2 emoji-box">
-                                        <img src="/emotion-img/${n.hashtag2}.svg" class="emoji-2-img" alt="">
-                                    </div>
-                                </div>
-                                <div class="news-view-count d-flex align-items-center">
-                                    <i class="far fa-eye"></i>
-                                    <span>${n.pageViews}</span>
-                                </div>
-                            </div>
-                            <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
-                                <div class="hashtag">
-                                    <a href="#">${n.hashtag1}</a>
-                                    <a href="#">${n.hashtag2}</a>
-                                </div>
-                                <div class="news-header">
-                                    <h5 id="news-header" data-id="${n._id}">${n.newsHeader}</h5>
-                                </div>
-                                <div class="news-author d-flex">
-                                    <div class="author-avatar">
-                                        <img src="${n.authorImage}" alt="">
-                                    </div>
-                                    By
-                                    <div class="author-name">
-                                        <a href="#">${n.authorName}</a>
-                                    </div>
-                                    <div class="news-date">
-                                        <span>${moment(`${n.date}`).fromNow()}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    `)
-                });
-                ////CLOSING LOAD MORE BUTTON
-                let allNewsLength = await axios.get(`${window.development}/api/all-news`).then(res => res.data.allNews);
-                if(allNews.length * limit >= allNewsLength.length) {
-                    $("#load-more-btn").css("display", "none");
-                }
-            }, 3000);
-        });
-    }
-
 
     //RIGHT TREND APPEND
     let rightTrend = await axios
@@ -142,17 +72,11 @@ $(document).ready(async function() {
     });
 
     //MAIN TREND APPENDING
-    let allNewsForMainTrend = await axios.get(`${window.development}/api/all-news`).then(res => res.data.allNews);
-    ///////////////////////////////
-    //  BURANI DUZELT //
-    ///////////////////////////
-    let mainTrend1 = allNewsForMainTrend[allNewsForMainTrend.length - 5];
-    let mainTrend2 = allNewsForMainTrend[allNewsForMainTrend.length - 4];
-    let mainTrend3 = allNewsForMainTrend[allNewsForMainTrend.length - 3];
-    let mainTrend4 = allNewsForMainTrend[allNewsForMainTrend.length - 2];
-    let mainTrend5 = allNewsForMainTrend[allNewsForMainTrend.length - 1];
-
-    console.log(allNewsForMainTrend);
+    let mainTrend1 = getAllNews[0];
+    let mainTrend2 = getAllNews[1];
+    let mainTrend3 = getAllNews[2];
+    let mainTrend4 = getAllNews[3];
+    let mainTrend5 = getAllNews[4];
 
     //First trend
     $('.trend-1 .emoji-1-img').attr('src', `/emotion-img/${mainTrend1.hashtag1}.svg`);
@@ -197,12 +121,17 @@ $(document).ready(async function() {
 
 
     //GETTING USER INFORMATION FROM LOCAL STORAGE
+
     let tokenMe = localStorage.getItem('user');
+
     if(tokenMe) {
+
         let userData = parseJwt(tokenMe);
-        let user = userData.usr;
-        let userName = user.username;
-        let userImage = user.image;
+
+        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+
+        let userName = userMe.username;
+        let userImage = userMe.image;
 
         let userProfileToggle = false;
         //user profile image gives
@@ -237,7 +166,7 @@ $(document).ready(async function() {
         let id = $(this).data('id');
         localStorage.setItem('newsID', id);
 
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
+        formData.pageViews = getAllNews.filter(a => a._id === id)[0].pageViews + 1;
     
         await axios
         .put(`${window.development}/api/update-page-views/${id}`, formData)
@@ -249,7 +178,7 @@ $(document).ready(async function() {
         let id = $(this).data('id');
         localStorage.setItem('newsID', id);
 
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
+        formData.pageViews = getAllNews.filter(a => a._id === id)[0].pageViews + 1;
     
         await axios
         .put(`${window.development}/api/update-page-views/${id}`, formData)
@@ -270,11 +199,29 @@ $(document).ready(async function() {
     ///SECTION LINK///
     $(".sections-li").click(function() {
         let sectionVal = {
-            name: $(this).text(),
-            val: $(this).data('section-val')
+            name: $(this).text()
         }
         localStorage.setItem('category', JSON.stringify(sectionVal));
     });
+
+    ///NEWS HASHTAG 1 LINK GIVING
+    $(document).on('click', '#hashtag-1', function() {
+        let hashtag1 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag1}`;
+        let hashtag1Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+    });
+    ///NEWS HASHTAG 2 LINK GIVING
+    $(document).on('click', '#hashtag-2', function() {
+        let hashtag2 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag2}`;
+        let hashtag2Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+    })
 
 });
 // jwt parse
