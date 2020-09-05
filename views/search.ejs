@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- GOOGLE FONTS -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/search.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+    <script src="/js/axios.min.js"></script>
+    <!-- MODAL FUNCTIONS -->
+    <script src="/modalFunctions-js/modalFunctions.js"></script>
+    <!-- SEARCH POST -->
+    <script src="/js/searchPost.js"></script>
+    <!-- SEARCH GET -->
+    <script src="/js/searchGet.js"></script>
+    <!-- config -->
+    <script src="/js/config.js"></script>
+    <script src="/js/moment-with-locales.min.js"></script>
+    <script src="/js/auth.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="main-container">
+
+        <%- include('../parts/header.ejs') -%>
+
+        <div class="search-result-side">
+            <div class="row m-0 pt-3">
+                <div class="search-text p-3 p-sm-4">
+                    <h2></h2>
+                </div>
+                <div class="col-12 p-0 news-col-cover">
+                    <div class="not-found-msg">
+                        <h2 style="font-size: 35px;"></h2>
+                    </div>
+                    <!-- GETTING SEARCH NEWS -->
+                </div>
+                <div class="pagination-box">
+                    <a href="#" class="previous-btn-a"><button type="button" class="previous-btn disable"><i class="fas fa-chevron-left"></i>ƏVVƏLKI</button></a>
+                    <a href="#" class="first-number-a"><button type="button" class="first-pagination-number pagination-number"></button></a>
+                    <a href="#" class="second-number-a"><button type="button" class="second-pagination-number pagination-number active"></button></a>
+                    <a href="#" class="third-number-a"><button type="button" class="third-pagination-number pagination-number"></button></a>
+                    <a href="#" class="next-btn-a"><button type="button" class="next-btn">NÖVBƏTİ<i class="fas fa-chevron-right"></i></button></a>
+                </div>
+            </div>
+        </div>
+
+        <%- include('../parts/footer.ejs') -%>
+
+    </div>
+
+</body>
+</html>

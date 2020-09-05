@@ -16,7 +16,7 @@ $(document).ready(async function() {
         $("#news-wrapper").append(`
             <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box" style="background: #1D1E29;">
                 <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29; height: 200px;">
-                    <img src="${a.image}" data-id="${a._id}" alt="" style="border-radius: 5px 0 0 5px;">
+                    <img src="${a.image}" data-id="${a._id}" alt="">
                     <div class="news-emoji">
                         <div class="emoji-1 emoji-box">
                             <img src="/emotion-img/${a.hashtag1}.svg" class="emoji-1-img" alt="">
@@ -30,7 +30,7 @@ $(document).ready(async function() {
                         <span>${a.pageViews}</span>
                     </div>
                 </div>
-                <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
+                <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29;">
                     <div class="hashtag">
                         <a href="#" id="hashtag-1">${a.hashtag1}</a>
                         <a href="#" id="hashtag-2">${a.hashtag2}</a>
@@ -118,47 +118,6 @@ $(document).ready(async function() {
     $("#trend-5-header").text(mainTrend5.newsHeader);
     $("#trend-5-author").text(mainTrend5.authorName);
     $("#trend-5-views").text(mainTrend5.pageViews);
-
-
-    //GETTING USER INFORMATION FROM LOCAL STORAGE
-
-    let tokenMe = localStorage.getItem('user');
-
-    if(tokenMe) {
-
-        let userData = parseJwt(tokenMe);
-
-        let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
-
-        let userName = userMe.username;
-        let userImage = userMe.image;
-
-        let userProfileToggle = false;
-        //user profile image gives
-        $("#user-profile").css('background-image', `url(${userImage})`);
-        $("#user-profile-modal").css("display", "none");
-        //give username to user-profile
-        $("#user-profile-username").text(userName);
-        //user-profile modal opening and closing
-        $("#user-profile").click(function() {
-            if(userProfileToggle === false) {
-                $("#user-profile-modal").slideDown(300);
-                userProfileToggle = true;
-            } else {
-                $("#user-profile-modal").slideUp(300);
-                userProfileToggle = false;
-            }
-        });
-        $(document).on('click', function(e) {
-            if(!(($(e.target).closest("#user-profile-modal").length > 0 ) ||
-            ($(e.target).closest("#user-profile").length > 0 ))) {
-                $("#user-profile-modal").slideUp(300);
-                userProfileToggle = false;
-            }
-        });
-    } else {
-        $("#dash-login-btn").css("display", "flex");
-    }
 
     //Main trend link
     let formData = {}

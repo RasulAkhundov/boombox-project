@@ -1,1 +1,1 @@
-DELETE  http://192.168.1.104:4000/api/delete-news/5f22f1913148891634d419c5
+GET  http://192.168.1.104:4000/api/search-length?q=a

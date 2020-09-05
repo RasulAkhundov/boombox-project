@@ -40,7 +40,12 @@ app.use(flash());
 app.use("/api", authRouter);
 app.use("/api", allNews);
 
-//all
+//Search
+app.get("/search", (req, res) => {
+    res.render("search");
+});
+
+//Dashboard
 app.get("/", (req, res) => {
     res.render("dashboard");
 });

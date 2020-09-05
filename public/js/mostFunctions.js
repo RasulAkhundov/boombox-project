@@ -247,6 +247,9 @@ $(document).ready(async function() {
         localStorage.setItem('category', JSON.stringify(hashtag2Val));
     })
 
+    let test = window.location.href;
+    console.log(test.split("=")[1])
+
 });
 // jwt parse
 function parseJwt(token) {

@@ -9,43 +9,6 @@ $(document).ready(async function() {
         localStorage.removeItem('newsID');
     }
 
-    /// GETTING ALL NEWS ///
-    let allNews = await axios.get(`${window.development}/api/get-all-news`).then(res => res.data.allNews);
-
-    //local storage info
-    let tokenMe = localStorage.getItem('user');
-    let userData = parseJwt(tokenMe);
-
-    let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
-
-    let userName = userMe.username;
-    let userImage = userMe.image;
-    let userBio = userMe.bio;
-
-    let userProfileToggle = false;
-    //user profile image gives
-    $("#user-profile").css('background-image', `url(${userImage})`)
-    $("#user-profile-modal").css("display", "none");
-    //give username to user-profile
-    $("#user-profile-username").text(userName);
-    //user-profile modal opening and closing
-    $("#user-profile").click(function() {
-        if(userProfileToggle === false) {
-            $("#user-profile-modal").slideDown(300);
-            userProfileToggle = true;
-        } else {
-            $("#user-profile-modal").slideUp(300);
-            userProfileToggle = false;
-        }
-    });
-    $(document).on('click', function(e) {
-        if(!(($(e.target).closest("#user-profile-modal").length > 0 ) ||
-        ($(e.target).closest("#user-profile").length > 0 ))) {
-            $("#user-profile-modal").slideUp(300);
-            userProfileToggle = false;
-        }
-    });
-
     //CREATE NEWS BUTTON ACTIVE CHANGES
     $(".create-side-header button").click(function() {
         $(".create-side-header button").removeClass('active');
@@ -364,7 +327,7 @@ $(document).ready(async function() {
                             <a href="#" id="hashtag-2-admin">${a.hashtag2}</a>
                         </div>
                         <div class="news-header">
-                            <h5 id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
+                            <h5 class="news-header-text" id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
                         </div>
                         <div class="news-description">
                             <span id="news-description">${a.newsDescription}</span>
@@ -510,17 +473,18 @@ $(document).ready(async function() {
 
     /// SEARCH POST WITH INPUT //////
     ////////////////////////////////
-    $("#admin_news_search").keyup(() => {
-        let searchItem = $(this).val().toLowerCase();
+    $("#search").keyup(function() {
+        let val = $(this).val().toLowerCase();
 
-        $("#news-header").each(function() {
-            let lineStr = $(this).text().toLowerCase();
-            if(lineStr.indexOf(searchItem) === -1) {
-                console.log("asdasd")
-                $(this).hide();
+        $(".news-header h5").each(function() {
+            let text = $(this).text().toLowerCase();
+            
+            if(text.indexOf(val) === -1) {
+                console.log("var")
+                $(this).parent().parent().parent().parent().fadeOut();
             } else {
-                console.log("werfwefwe")
-                $(this).show();
+                console.log("yox")
+                $(this).parent().parent().parent().parent().fadeIn();
             }
         })
     })

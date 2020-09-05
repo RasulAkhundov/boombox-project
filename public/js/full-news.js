@@ -89,7 +89,6 @@ $(document).ready(async function() {
         let userData = parseJwt(tokenMe);
 
         let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
-        console.log(userMe);
 
         let userName = userMe.username;
         let userImage = userMe.image;
@@ -143,7 +142,6 @@ $(document).ready(async function() {
                 window.location.reload();
                 return res.data;
             });
-            console.log(comment);
         });
     } else {
         $("#dash-login-btn").css("display", "flex");
@@ -287,4 +285,23 @@ $(document).ready(async function() {
         .put(`${window.development}/api/update-page-views/${id}`, formData)
         window.location.href = `/news/${id}`;
     });
+
+    ///NEWS HASHTAG 1 LINK GIVING
+    $(document).on('click', '#hashtag-1', function() {
+        let hashtag1 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag1}`;
+        let hashtag1Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+    });
+    ///NEWS HASHTAG 2 LINK GIVING
+    $(document).on('click', '#hashtag-2', function() {
+        let hashtag2 = $(this).text().toLowerCase();
+        window.location.href = `/category-${hashtag2}`;
+        let hashtag2Val = {
+            name: $(this).text()
+        }
+        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+    })
 })

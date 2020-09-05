@@ -300,23 +300,61 @@ router.get('/category-:hashtag1', (req, res) => {
     }
 });
 
-////////////////////////////////
-////// NEWS PAGINATION ////////
-//////////////////////////////
-router.get('/news', (req, res) => {
-    let page = req.query.page;
-    let limit = 2;
+///////////////////////////////
+///////////SEARCH/////////////
+/////////////////////////////
+function escapeRegex(text) {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
 
-    AllNews.find()
-    .limit(page * limit)
-    .sort({ date: -1 })
-    .then(newsPagination => {
-        if(!newsPagination) {
-            console.log("error from news pagination");
+router.get("/search", (req, res) => {
+    if(req.query.page) {
+        let page = req.query.page;
+        let postPerPage = 5;
+        const regex = new RegExp(escapeRegex(req.query.q), 'ig');
+
+        AllNews.find({ "newsHeader": regex })
+        .sort({ _id: -1 })
+        .skip((postPerPage * page) - postPerPage)
+        .limit(postPerPage)
+        .then(searchPagination => {
+            if(!searchPagination) {
+                console.log("error from search Pagination");
+            } else {
+                res.status(200).json({ searchPagination });
+            }
+        })
+    } else {
+        const regex = new RegExp(escapeRegex(req.query.q), 'ig');
+        AllNews.find({ "newsHeader": regex })
+        .sort({ _id: -1 })
+        .limit(5)
+        .then(searchPagination => {
+            if(!searchPagination) {
+                console.log("error from news search")
+            } else {
+                res.status(200).json({ searchPagination });
+            }
+        })
+    }
+});
+//Getting Search News Length
+router.get('/search-length', (req, res) => {
+    const regex = new RegExp(escapeRegex(req.query.q), 'ig');
+    AllNews.find({ "newsHeader": regex })
+    .sort({ _id: -1 })
+    .then(searchLength => {
+        if(!searchLength) {
+            console.log("error from news search")
         } else {
-            res.status(200).json({ newsPagination });
+            res.status(200).json({ searchLength });
         }
     })
 })
+
+////////////////////////////////
+////// SEARCH PAGINATION //////
+//////////////////////////////
+
  
 module.exports = router;

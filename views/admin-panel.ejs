@@ -12,6 +12,10 @@
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/axios.min.js"></script>
+    <!-- MODAL FUNCTIONS -->
+    <script src="/modalFunctions-js/modalFunctions.js"></script>
+    <!-- SEARCH POST -->
+    <script src="/js/searchPost.js"></script>
     <!-- config -->
     <script src="/js/config.js"></script>
     <script src="/fs.js/fs.js"></script>
@@ -108,8 +112,12 @@
         <!-- NEWS -->
         <div class="news">
             <div class="news-search-side">
-                <input type="search" placeholder="Post axtarin..." id="admin_news_search">
+                <div class="input-cover">
+                    <input type="search" placeholder="Post axtarin..." id="search" autocomplete="off">
+                    <i class="fas fa-search"></i>
+                </div>
             </div>
+            <span id="post-not-found">Post tapilmadi :(</span>
             <div class="row m-0 py-5 px-3 px-lg-4 news_row">
                 <!-- ALL NEWS HERE -->
             </div>
