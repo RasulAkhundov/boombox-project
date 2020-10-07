@@ -109,40 +109,40 @@ $(document).ready(async function() {
     let mainTrend5 = getAllNews[4];
 
     //First trend
-    $('.trend-1 .emoji-1-img').attr('src', `/emotion-img/${mainTrend1.hashtag1}.svg`);
-    $('.trend-1 .emoji-2-img').attr('src', `/emotion-img/${mainTrend1.hashtag2}.svg`);
+    $('.trend-1 .emoji-1-img').attr('src', `/emotion-img/${mainTrend1.hashtag1.toLowerCase()}.svg`);
+    $('.trend-1 .emoji-2-img').attr('src', `/emotion-img/${mainTrend1.hashtag2.toLowerCase()}.svg`);
     $(".trend-1").attr('data-id', `${mainTrend1._id}`);
     $(".trend-1").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend1.image})`);
     $("#trend-1-header").text(mainTrend1.newsHeader);
     $("#trend-1-author").text(mainTrend1.authorName);
     $("#trend-1-views").text(mainTrend1.pageViews);
     //Second trend
-    $('.trend-2 .emoji-1-img').attr('src', `/emotion-img/${mainTrend2.hashtag1}.svg`);
-    $('.trend-2 .emoji-2-img').attr('src', `/emotion-img/${mainTrend2.hashtag2}.svg`);
+    $('.trend-2 .emoji-1-img').attr('src', `/emotion-img/${mainTrend2.hashtag1.toLowerCase()}.svg`);
+    $('.trend-2 .emoji-2-img').attr('src', `/emotion-img/${mainTrend2.hashtag2.toLowerCase()}.svg`);
     $(".trend-2").attr('data-id', `${mainTrend2._id}`);
     $(".trend-2").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend2.image})`);
     $("#trend-2-header").text(mainTrend2.newsHeader);
     $("#trend-2-author").text(mainTrend2.authorName);
     $("#trend-2-views").text(mainTrend2.pageViews);
     //Third trend
-    $('.trend-3 .emoji-1-img').attr('src', `/emotion-img/${mainTrend3.hashtag1}.svg`);
-    $('.trend-3 .emoji-2-img').attr('src', `/emotion-img/${mainTrend3.hashtag2}.svg`);
+    $('.trend-3 .emoji-1-img').attr('src', `/emotion-img/${mainTrend3.hashtag1.toLowerCase()}.svg`);
+    $('.trend-3 .emoji-2-img').attr('src', `/emotion-img/${mainTrend3.hashtag2.toLowerCase()}.svg`);
     $(".trend-3").attr('data-id', `${mainTrend3._id}`);
     $(".trend-3").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend3.image})`);
     $("#trend-3-header").text(mainTrend3.newsHeader);
     $("#trend-3-author").text(mainTrend3.authorName);
     $("#trend-3-views").text(mainTrend3.pageViews);
     //Fourt trend
-    $('.trend-4 .emoji-1-img').attr('src', `/emotion-img/${mainTrend4.hashtag1}.svg`);
-    $('.trend-4 .emoji-2-img').attr('src', `/emotion-img/${mainTrend4.hashtag2}.svg`);
+    $('.trend-4 .emoji-1-img').attr('src', `/emotion-img/${mainTrend4.hashtag1.toLowerCase()}.svg`);
+    $('.trend-4 .emoji-2-img').attr('src', `/emotion-img/${mainTrend4.hashtag2.toLowerCase()}.svg`);
     $(".trend-4").attr('data-id', `${mainTrend4._id}`);
     $(".trend-4").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend4.image})`);
     $("#trend-4-header").text(mainTrend4.newsHeader);
     $("#trend-4-author").text(mainTrend4.authorName);
     $("#trend-4-views").text(mainTrend4.pageViews);
     //Fifth trend
-    $('.trend-5 .emoji-1-img, .trend-1-5 .emoji-1-img').attr('src', `/emotion-img/${mainTrend5.hashtag1}.svg`);
-    $('.trend-5 .emoji-2-img, .trend-1-5 .emoji-2-img').attr('src', `/emotion-img/${mainTrend5.hashtag2}.svg`);
+    $('.trend-5 .emoji-1-img, .trend-1-5 .emoji-1-img').attr('src', `/emotion-img/${mainTrend5.hashtag1.toLowerCase()}.svg`);
+    $('.trend-5 .emoji-2-img, .trend-1-5 .emoji-2-img').attr('src', `/emotion-img/${mainTrend5.hashtag2.toLowerCase()}.svg`);
     $(".trend-5, .trend-1-5").attr('data-id', `${mainTrend5._id}`);
     $(".trend-5, .trend-1-5").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend5.image})`);
     $("#trend-5-header, #trend-1-5-header").text(mainTrend5.newsHeader);
