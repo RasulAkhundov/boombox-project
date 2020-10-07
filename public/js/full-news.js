@@ -54,8 +54,8 @@ $(document).ready(async function() {
     let authorInfo = await axios.get(`${window.development}/api/user/${fullNews.authorId}`).then(res => res.data.userInfo);
 
     $("#about-author-bio").text(`${authorInfo.bio}`);
-    $('.emoji-1-img').attr('src', `/emotion-img/${fullNews.hashtag1}.svg`);
-    $('.emoji-2-img').attr('src', `/emotion-img/${fullNews.hashtag2}.svg`);
+    $('.emoji-1-img').attr('src', `/emotion-img/${fullNews.hashtag1.toLowerCase()}.svg`);
+    $('.emoji-2-img').attr('src', `/emotion-img/${fullNews.hashtag2.toLowerCase()}.svg`);
     $("#hashtag-1").text(`${fullNews.hashtag1}`);
     $("#hashtag-2").text(`${fullNews.hashtag2}`);
     $("#news-header-text, title").text(`${fullNews.newsHeader}`);
@@ -342,10 +342,10 @@ $(document).ready(async function() {
                     <img src="${m.image}" data-id="${m._id}" alt="" style="border-radius: 5px 0 0 5px;">
                     <div class="full-news-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="/emotion-img/${m.hashtag1}.svg" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/${m.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="/emotion-img/${m.hashtag2}.svg" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/${m.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="full-news-view-count d-flex align-items-center">

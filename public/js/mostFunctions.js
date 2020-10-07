@@ -95,10 +95,10 @@ $(document).ready(async function() {
                             <img src="${c.image}" data-id="${c._id}" alt="">
                             <div class="full-news-emoji">
                                 <div class="emoji-1 emoji-box">
-                                    <img src="/emotion-img/${c.hashtag1}.svg" class="emoji-1-img" alt="">
+                                    <img src="/emotion-img/${c.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                                 </div>
                                 <div class="emoji-2 emoji-box">
-                                    <img src="/emotion-img/${c.hashtag2}.svg" class="emoji-2-img" alt="">
+                                    <img src="/emotion-img/${c.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                                 </div>
                             </div>
                             <div class="full-news-view-count d-flex align-items-center">
@@ -148,10 +148,10 @@ $(document).ready(async function() {
                             <img src="${c.image}" data-id="${c._id}" alt="">
                             <div class="full-news-emoji">
                                 <div class="emoji-1 emoji-box">
-                                    <img src="/emotion-img/${c.hashtag1}.svg" class="emoji-1-img" alt="">
+                                    <img src="/emotion-img/${c.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                                 </div>
                                 <div class="emoji-2 emoji-box">
-                                    <img src="/emotion-img/${c.hashtag2}.svg" class="emoji-2-img" alt="">
+                                    <img src="/emotion-img/${c.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                                 </div>
                             </div>
                             <div class="full-news-view-count d-flex align-items-center">

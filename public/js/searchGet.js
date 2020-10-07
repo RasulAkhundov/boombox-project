@@ -17,10 +17,10 @@ $(document).ready(async function(){
                     <div class="search-news-img" style="background-image: url(${s.image});" data-id="${s._id}">
                         <div class="news-emoji">
                             <div class="emoji-1 emoji-box">
-                                <img src="/emotion-img/${s.hashtag1}.svg" class="emoji-1-img" alt="">
+                                <img src="/emotion-img/${s.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                             </div>
                             <div class="emoji-2 emoji-box">
-                                <img src="/emotion-img/${s.hashtag2}.svg" class="emoji-2-img" alt="">
+                                <img src="/emotion-img/${s.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                             </div>
                         </div>
                         <div class="news-view-count d-flex align-items-center">

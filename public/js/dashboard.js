@@ -49,10 +49,10 @@ $(document).ready(async function() {
                     <img src="${a.image}" data-id="${a._id}" alt="">
                     <div class="news-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="/emotion-img/${a.hashtag1}.svg" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/${a.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="/emotion-img/${a.hashtag2}.svg" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/${a.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="news-view-count d-flex align-items-center">

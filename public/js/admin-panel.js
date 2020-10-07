@@ -101,10 +101,10 @@ $(document).ready(async function() {
                     <div class="news-img" data-id="${a._id}" alt="" style="border-radius: 5px 5px 0 0; background-image: url('${a.image}');">
                     <div class="news-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="/emotion-img/${a.hashtag1}.svg" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/${a.hashtag1.toLowerCase()}.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="/emotion-img/${a.hashtag2}.svg" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/${a.hashtag2.toLowerCase()}.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="news-view-count">
@@ -119,9 +119,6 @@ $(document).ready(async function() {
                     </div>
                     <div class="news-header">
                         <h5 class="news-header-text" id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
-                    </div>
-                    <div class="news-description">
-                        <span id="news-description">${a.newsDescription.slice(0, 72)}...</span>
                     </div>
                     <div class="news-author d-flex">
                         <div class="author-avatar">
