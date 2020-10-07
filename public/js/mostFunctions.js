@@ -138,7 +138,6 @@ $(document).ready(async function() {
         let hashtagCategory = await axios
         .get(`${window.development}/api/category?h=${hVal}`)
         .then(res => res.data.categoryOrder);
-        console.log(hashtagCategory)
 
         hashtagCategory.map(c => {
             $("#category-news-row").append(`

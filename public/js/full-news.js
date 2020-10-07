@@ -205,7 +205,6 @@ $(document).ready(async function() {
         ////////////////////////
         //////DO DISLIKE//////////
         //////////////////////
-        console.log(fullNews)
         let dislikeData = {};
         $("#dislike-btn").click(async function() {
             dislikeData.id = fullNews._id;
@@ -355,8 +354,8 @@ $(document).ready(async function() {
                 </div>
                 <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
                     <div class="full-news-hashtag">
-                        <a href="#">${m.hashtag1}</a>
-                        <a href="#">${m.hashtag2}</a>
+                        <a href="#" id="hashtag-1">${m.hashtag1}</a>
+                        <a href="#" id="hashtag-2">${m.hashtag2}</a>
                     </div>
                     <div class="full-news-header">
                         <h5 id="full-news-header" data-id="${m._id}">${m.newsHeader}</h5>
