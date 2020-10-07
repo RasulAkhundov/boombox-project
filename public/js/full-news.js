@@ -360,9 +360,6 @@ $(document).ready(async function() {
                     <div class="full-news-header">
                         <h5 id="full-news-header" data-id="${m._id}">${m.newsHeader}</h5>
                     </div>
-                    <div class="full-news-description">
-                        <span id="full-news-description">${m.newsDescription.slice(0, 72)}...</span>
-                    </div>
                     <div class="full-news-author d-flex">
                         <div class="author-avatar">
                             <img src="${m.authorImage}" alt="">
