@@ -101,17 +101,17 @@ app.get("/*", (req, res) => {
     res.redirect('/');
 });
 
-// mongoose connect
-mongoose.set("useCreateIndex", true);
-mongoose.connect(
-  "mongodb://localhost/boombox",
-  {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false
-  },
-  () => console.log("mongodb is ready")
-);
+// // mongoose connect
+// mongoose.set("useCreateIndex", true);
+// mongoose.connect(
+//   "mongodb://localhost/boombox",
+//   {
+//     useNewUrlParser: true,
+//     useUnifiedTopology: true,
+//     useFindAndModify: false
+//   },
+//   () => console.log("mongodb is ready")
+// );
 
 // socket io connect
 io.on("connection", socket => {
