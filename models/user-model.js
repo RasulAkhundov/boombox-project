@@ -16,6 +16,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: false,
         default: "bioqrafia elave edin"
+    },
+    admin: {
+        type: Boolean,
+        default: false,
+        required: true
     }
 });
 
@@ -37,7 +42,8 @@ schema.methods.generateJWT = function generateJWT() {
                 email: this.email,
                 password: this.password,
                 image: this.image,
-                bio: this.bio
+                bio: this.bio,
+                admin: this.admin
             }
         },
         'Rasul2002!'

@@ -8,7 +8,7 @@ const fs = require("fs");
 const router = express.Router();
 
 router.post("/post-all-news", (req, res) => {
-    const { mainContentName, image, newsHeader, newsDescription, hashtag1, hashtag2, authorImage, authorName, authorBio, date } = req.body;
+    const { mainContentName, image, newsHeader, newsDescription, newsIframe, hashtag1, hashtag2, authorId, authorImage, authorName, authorBio, date } = req.body;
 
     let parts = image.split(";");
     let mimType = parts[0].split(":")[1];
@@ -29,8 +29,10 @@ router.post("/post-all-news", (req, res) => {
             image: `/upload/all-news-image/${imageName}.${ext}`,
             newsHeader,
             newsDescription,
+            newsIframe,
             hashtag1,
             hashtag2,
+            authorId,
             authorImage,
             authorName,
             authorBio,
@@ -46,11 +48,9 @@ router.post("/post-all-news", (req, res) => {
     })
     .catch(err => {
         if(err) {
-            req.flash('newsSuccessMsg', 'Xeber ugurla yaradildi!');
-            console.log(req.flash() + "err");
+            console.log("err");
         } else {
-            console.log(req.flash() + "errorsuz");
-            req.flash('news-error-msg', 'Xeber yaradilarken xeta bas verdi!');
+            console.log("errorsuz");
         }
     })
 });
@@ -71,12 +71,46 @@ router.post('/do-comment', (req, res) => {
     });
 });
 
+//POST LIKE
+router.post('/do-like', (req, res) => {
+    const { id, user } = req.body;
+
+    AllNews.findByIdAndUpdate(
+        { _id: id },
+        { $push: { like: { user: user } } },
+        (err, like) => {
+            if(err) {
+                console.log("error from do like")
+            } else {
+                res.status(200).json({ like });
+            }
+        }
+    )
+})
+
+//POST DISLIKE
+router.post('/do-dislike', (req, res) => {
+    const { id, user } = req.body;
+
+    AllNews.findByIdAndUpdate(
+        { _id: id },
+        { $push: { dislike: { user: user } } },
+        (err, dislike) => {
+            if(err) {
+                console.log("error from do dislike")
+            } else {
+                res.status(200).json({ dislike });
+            }
+        }
+    )
+})
+
 //GET FULL NEWS
 router.get("/news/:id", (req, res) => {
     AllNews.findById(req.params.id)
     .then(fullNews => {
         if(!fullNews) {
-            console.log("error from full news api")
+            res.send({ error: 'have an error' });
         } else {
             res.status(200).json({ fullNews });
         }
@@ -86,8 +120,12 @@ router.get("/news/:id", (req, res) => {
 
 ///ALL NEWS GET FUNCTION
 router.get("/get-all-news", (req, res) => {
+
+    let l = parseInt(req.query.limit);
+
     AllNews.find()
     .sort({ _id: -1 })
+    .limit(l)
     .then(allNews => {
         if(!allNews) {
             console.log("error from get all news length")
@@ -99,7 +137,11 @@ router.get("/get-all-news", (req, res) => {
 
 ///TECHNO NEWS GET FUNCTION
 router.get("/get-techno-news", (req, res) => {
+
+    let l = parseInt(req.query.limit);
+
     AllNews.find({ mainContentName: 'techno' })
+    .limit(l)
     .sort({ _id: -1})
     .then(allNews => {
         if(!allNews) {
@@ -112,7 +154,11 @@ router.get("/get-techno-news", (req, res) => {
 
 ///GAME NEWS GET FUNCTION
 router.get("/get-game-news", (req, res) => {
+
+    let l = parseInt(req.query.limit);
+
     AllNews.find({ mainContentName: 'game' })
+    .limit(l)
     .sort({ _id: -1})
     .then(allNews => {
         if(!allNews) {
@@ -125,7 +171,11 @@ router.get("/get-game-news", (req, res) => {
 
 ///TREND NEWS GET FUNCTION
 router.get("/get-trend-news", (req, res) => {
+
+    let l = parseInt(req.query.limit);
+
     AllNews.find({ mainContentName: 'trend' })
+    .limit(l)
     .sort({ _id: -1})
     .then(allNews => {
         if(!allNews) {
@@ -194,6 +244,25 @@ router.delete("/delete-news/:id", (req, res) => {
     });
 });
 
+//EDIT NEWS
+router.put("/edit-news/:id", (req, res) => {
+    const { id } = req.params;
+    const { newsHeader, newsDescription, hashtag1, hashtag2 } = req.body;
+
+    AllNews.findOneAndUpdate(
+        { _id: id },
+        { $set: { newsHeader, newsDescription, hashtag1, hashtag2 } },
+        { new: true },
+        ( err, data ) => {
+            if(err) {
+                console.log("error from editing news api")
+            } else {
+                res.status(200).json({ updated: true });
+            }
+        }
+    )
+})
+
 //UPDATING PAGE VIEWS
 router.put("/update-page-views/:id", (req, res) => {
     const { pageViews } = req.body;
@@ -232,64 +301,82 @@ router.get('/more-from/:hashtag1', (req, res) => {
 })
 
 ///CATEGORY FILTERING 
-router.get('/category-:hashtag1', (req, res) => {
+router.get('/category', (req, res) => {
 
     let order = req.query.order;
+    let h = req.query.h;
 
-    if(order === "en-cox-baxilan") {
+    if(order) {
+        if(order === "en-cox-baxilan") {
+            AllNews.find({
+                $or: [
+                    { hashtag1: h },
+                    { hashtag2: h }
+                ]
+            })
+            .sort({ pageViews: -1 })
+            .then(categoryOrder => {
+                if(!categoryOrder) {
+                    console.log("error from category hashtag");
+                } else {
+                    res.status(200).json({ categoryOrder });
+                }
+            })
+        } else if(order === "en-yeni") {
+            AllNews.find({
+                $or: [
+                    { hashtag1: h },
+                    { hashtag2: h }
+                ]
+            })
+            .sort({ _id: -1 })
+            .then(categoryOrder => {
+                if(!categoryOrder) {
+                    console.log("error from category hashtag");
+                } else {
+                    res.status(200).json({ categoryOrder });
+                }
+            })
+        } else if(order === "en-kohne") {
+            AllNews.find({
+                $or: [
+                    { hashtag1: h },
+                    { hashtag2: h }
+                ]
+            })
+            .sort({ _id: 1 })
+            .then(categoryOrder => {
+                if(!categoryOrder) {
+                    console.log("error from category hashtag");
+                } else {
+                    res.status(200).json({ categoryOrder });
+                }
+            })
+        } else if(order === "xususi") {
+            AllNews.find({
+                $or: [
+                    { hashtag1: h },
+                    { hashtag2: h }
+                ]
+            })
+            .sort({ pageViews: -1 })
+            .limit(10)
+            .then(categoryOrder => {
+                if(!categoryOrder) {
+                    console.log("error from category hashtag");
+                } else {
+                    res.status(200).json({ categoryOrder });
+                }
+            })
+        }
+    } else {
         AllNews.find({
             $or: [
-                { hashtag1: req.params.hashtag1 },
-                { hashtag2: req.params.hashtag1 }
-            ]
-        })
-        .sort({ pageViews: -1 })
-        .then(categoryOrder => {
-            if(!categoryOrder) {
-                console.log("error from category hashtag");
-            } else {
-                res.status(200).json({ categoryOrder });
-            }
-        })
-    } else if(order === "en-yeni") {
-        AllNews.find({
-            $or: [
-                { hashtag1: req.params.hashtag1 },
-                { hashtag2: req.params.hashtag1 }
+                { hashtag1: h },
+                { hashtag2: h }
             ]
         })
         .sort({ _id: -1 })
-        .then(categoryOrder => {
-            if(!categoryOrder) {
-                console.log("error from category hashtag");
-            } else {
-                res.status(200).json({ categoryOrder });
-            }
-        })
-    } else if(order === "en-kohne") {
-        AllNews.find({
-            $or: [
-                { hashtag1: req.params.hashtag1 },
-                { hashtag2: req.params.hashtag1 }
-            ]
-        })
-        .sort({ _id: 1 })
-        .then(categoryOrder => {
-            if(!categoryOrder) {
-                console.log("error from category hashtag");
-            } else {
-                res.status(200).json({ categoryOrder });
-            }
-        })
-    } else if(order === "xususi") {
-        AllNews.find({
-            $or: [
-                { hashtag1: req.params.hashtag1 },
-                { hashtag2: req.params.hashtag1 }
-            ]
-        })
-        .sort({ pageViews: -1 })
-        .limit(3)
         .then(categoryOrder => {
             if(!categoryOrder) {
                 console.log("error from category hashtag");
@@ -308,6 +395,9 @@ function escapeRegex(text) {
 };
 
 router.get("/search", (req, res) => {
+    ////////////////////////////////
+    ////// SEARCH PAGINATION //////
+    //////////////////////////////
     if(req.query.page) {
         let page = req.query.page;
         let postPerPage = 5;
@@ -351,10 +441,5 @@ router.get('/search-length', (req, res) => {
         }
     })
 })
-
-////////////////////////////////
-////// SEARCH PAGINATION //////
-//////////////////////////////
-
  
 module.exports = router;

@@ -9,15 +9,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/mostFunctions.css">
+    <!-- Menu Link -->
+    <link rel="stylesheet" href="/css/menu.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/axios.min.js"></script>
+    <!-- marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- MODAL FUNCTIONS -->
     <script src="/modalFunctions-js/modalFunctions.js"></script>
     <!-- SEARCH POST -->
     <script src="/js/searchPost.js"></script>
     <!-- config -->
     <script src="/js/config.js"></script>
+    <!-- Cookie import -->
+    <script src="/cookie/js.cookie.min.js"></script>
     <script src="/js/moment-with-locales.min.js"></script>
     <script src="/js/auth.js"></script>
     <script src="/js/mostFunctions.js"></script>
@@ -25,6 +31,18 @@
 </head>
 <body>
     <div class="main-container">
+
+        <!-- Scroll Up -->
+        <a href="#"><div class="scroll-up">
+            <i class="fas fa-arrow-up"></i>
+        </div></a>
+
+        <!-- LOADING WRAPPER -->
+        <div class="loading-wrapper">
+            <img src="/img/loading.gif" alt="">
+        </div>
+
+        <%- include('../parts/menu.ejs') -%>
         
         <%- include('../parts/header.ejs') -%>
 
@@ -50,19 +68,19 @@
                             <!-- <a class="most-voted"><div class="most-voted category_option" data-order-val="most-voted" data-order-name="Ən çox səs verilən">
                                 <span>Ən çox səs verilən</span>
                             </div></a> -->
-                            <a class="most-viewed"><div class="most-viewed category_option" data-order-val="most-viewed" data-order-name="en-cox-baxilan">
+                            <a class="most-viewed"><div class="most-viewed en-cox-baxilan category_option" data-order-val="most-viewed" data-order-name="en-cox-baxilan">
                                 <span>Ən çox baxılan</span>
                             </div></a>
                             <!-- <a class="most-discussed"><div class="most-discussed category_option" data-order-val="most-discussed" data-order-name="Ən çox müzakirə olunan">
                                 <span>Ən çox müzakirə olunan</span>
                             </div></a> -->
-                            <a class="new"><div class="recent category_option" data-order-val="new" data-order-name="en-yeni">
+                            <a class="new"><div class="recent en-yeni category_option" data-order-val="new" data-order-name="en-yeni">
                                 <span>Ən yeni</span>
                             </div></a>
-                            <a class="featured"><div class="featured category_option" data-order-val="featured" data-order-name="xususi">
+                            <a class="featured"><div class="featured xususi category_option" data-order-val="featured" data-order-name="xususi">
                                 <span>Xüsusi</span>
                             </div></a>
-                            <a class="old"><div class="random category_option" style="border: 0;" data-order-val="old" data-order-name="en-kohne">
+                            <a class="old"><div class="random en-kohne category_option" style="border: 0;" data-order-val="old" data-order-name="en-kohne">
                                 <span>Ən kohnə</span>
                             </div></a>
                             <!-- <a class="most-shared"><div class="most-shared category_option" data-order-val="most-shared" data-order-name="Ən çox paylaşılan">

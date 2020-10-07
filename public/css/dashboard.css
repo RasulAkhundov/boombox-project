@@ -5,13 +5,49 @@
 }
 html, body {
     width: 100%;
-    height: 100%;
+    height: 100vh;
     margin: 0;
 }
 .main-container {
     width: 100%;
-    min-height: 100%;
+    min-height: 100vh;
     background: #121117;
+}
+/* SCROLL UP */
+.scroll-up {
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    width: 45px;
+    height: 45px;
+    border-radius: 5px;
+    background: #D02E3E;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999999999;
+    cursor: pointer;
+}
+.scroll-up i {
+    font-size: 18px;
+    color: white;
+}
+/* LOADING WRAPPER */
+.loading-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #121117;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999999999;
+}
+.loading-wrapper img {
+    width: 75px;
+    height: 75px;
 }
 header {
     width: 100%;
@@ -205,21 +241,30 @@ header {
 
 /* TRENDING LAYOUT */
 .trending-layout {
-    flex: 1;
-    margin-top: 62px;
+    padding-top: 63px;
+    display: grid;
+    grid-template-columns: 2fr 3fr;
 }
-.trend-wrap-1, .trend-wrap-2 {
-    display: flex;
+.trend-wrap-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
 }
 /* TREND NEWS VIEW */
 .trend-views i, .trend-views span {
     font-size: 14px;
     color: #efefef;
 }
+.trend-1 {
+    height: 540px;
+}
+.trend-1-5 {
+    display: none !important;
+}
+.trend-1-5, .trend-2, .trend-3, .trend-4, .trend-5 {
+    height: 270px;
+}
 .trend {
-    flex: 1;
     padding: 15px;
-    height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -250,13 +295,7 @@ header {
     margin-top: 5px;
     transition: 0.3s ease;
 }
-.trend-1, .trend-2 {
-    height: 500px;
-}
-.trend-3, .trend-4, .trend-5 {
-    height: 300px;
-}
-.trend-1 .trend-info h5, .trend-2 .trend-info h5 {
+.trend-1 .trend-info h5 {
     font-size: 28px;
 }
 .trend-info {
@@ -324,6 +363,10 @@ header {
     width: 100%;
     height: 200px;
     cursor: pointer;
+    transition: 0.4s ease;
+}
+.news-img-box img:hover {
+    transform: scale(1.5);
 }
 .news-box .hashtag {
     margin-bottom: 5px;
@@ -385,8 +428,12 @@ header {
     display: flex;
     flex-direction: column;
 }
+#news-wrapper {
+    transition: 0.3s ease;
+}
 .news-img-box {
     position: relative;
+    overflow: hidden;
 }
 .news-emoji {
     position: absolute;
@@ -452,6 +499,7 @@ header {
 .load-more-btn-img {
     width: 30px;
     height: 30px;
+    margin-left: 15px;
     display: none;
 }
 
@@ -602,6 +650,13 @@ footer {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+footer .row {
+    width: 1240px;
 }
 footer .footer-logo-img {
     margin-bottom: 30px;
@@ -645,36 +700,55 @@ footer .footer-footer {
     font-weight: 400;
 }
 
+@media screen and (max-width: 1678px) {
+    .trend-1 {
+        height: 450px;
+    }
+    .trend-1-5, .trend-2, .trend-3, .trend-4, .trend-5 {
+        height: 225px;
+    }
+}
 @media screen and (max-width: 1400px) {
     /* NEWS */
     .news_row {
         width: 100%;
     }
-    /* TRENDING */
-    .trend-1, .trend-2 {
-        height: 375px;
-    }
-    .trend-3, .trend-4, .trend-5 {
-        height: 225px;
-    }
-    /* TRENDING NEWS WRAPPER */
-    .trending-news-wrapper .img {
-        height: 185px;
+    footer .row {
+        width: 100%;
     }
 }
-@media screen and (max-width: 987px) {
+@media screen and (max-width: 1200px) {
+    .trending-layout {
+        grid-template-columns: 1fr 1fr;
+    }
     .trend-wrap-2 {
-        flex-direction: column;
-        height: 750px;
+        grid-template-columns: 1fr;
+    }
+    .trend-1 {
+        height: 400px;
+    }
+    .trend-1-5, .trend-2, .trend-3, .trend-4, .trend-5 {
+        height: 200px;
+    }
+    .trend-5 {
+        display: none;
+    }
+    .trend-1-5 {
+        display: flex !important;
     }
 }
 @media screen and (max-width: 768px) {
-    .trend-wrap-1 {
-        height: 500px;
-        flex-direction: column;
+    .trending-layout {
+        grid-template-columns: 1fr;
     }
-    .trend-1 .trend-info h5, .trend-2 .trend-info h5 {
-        font-size: 22px;
+    .trend {
+        height: 250px;
+    }
+    .trend-5 {
+        display: flex;
+    }
+    .trend-1-5 {
+        display: none !important;
     }
     .header-comp-1 img {
         width: 150px;

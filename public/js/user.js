@@ -1,5 +1,5 @@
 $(document).ready(async function() {
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
 
     if(tokenMe) {
         const userData = parseJwt(tokenMe);
@@ -13,11 +13,8 @@ $(document).ready(async function() {
         } else {
             $("#create").css("display", "none");
         }
-    } else {
-        console.log("you have not account yet");
     }
 })
-
 // jwt parse
 function parseJwt(token) {
     var base64Url = token.split(".")[1];

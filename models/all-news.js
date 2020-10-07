@@ -5,8 +5,10 @@ const schema = new mongoose.Schema({
     image: { type: String, required: true },
     newsHeader: { type: String, required: true },
     newsDescription: { type: String, required: true },
+    newsIframe: { type: String, required: false },
     hashtag1: { type: String, required: true },
     hashtag2: { type: String, required: true },
+    authorId: { type: String, required: true },
     authorImage: {type: String },
     authorName: { type: String },
     authorBio: { type: String },
@@ -20,7 +22,17 @@ const schema = new mongoose.Schema({
             commentDate: { type: Date, default: Date.now() }
         }
     ],
-    pageViews: { type: Number, default: 0 }
+    pageViews: { type: Number, default: 0 },
+    like: [
+        {
+            user: { type: mongoose.Types.ObjectId, ref: 'user' }
+        }
+    ],
+    dislike: [
+        {
+            user: { type: mongoose.Types.ObjectId, ref: 'user' }
+        }
+    ]
 });
 
 let AllNews = mongoose.model("AllNews", schema)

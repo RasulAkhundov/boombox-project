@@ -1,18 +1,48 @@
 $(document).ready(async function() {
 
-    if(window.location.pathname === "/") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
-    }
-
     /////////////////////////
     //// NEWS PAGINATION ///
     ///////////////////////
+    let newsLimit = 10;
     let getAllNews = await axios
-    .get(`${window.development}/api/get-all-news`)
+    .get(`${window.development}/api/get-all-news?limit=${newsLimit}`)
     .then(res => res.data.allNews);
 
+    //GETTING ALL NEWS LENGTH
+    let allNews = await axios.get(`${window.development}/api/get-all-news`).then(res => res.data.allNews);
+
+    //DISPLAY NONE SEE MORE BUTTON
+    if(allNews.length <= newsLimit ) {
+        $("#load-more-btn").css("display", "none");
+    }
+
     getAllNews.map(a => {
+        return newsReturn(a);
+    });
+
+    ///SEE MORE NEWS FUNCTION
+    $("#load-more-btn").click(function() {
+        newsLimit += 10;
+        $(".load-more-btn-img").css("display", "flex");
+
+        setTimeout(async function() {
+            $(".news-box").remove();
+            $(".load-more-btn-img").css("display", "none");
+
+            ///DISPLAY NONE LOAD MORE BUTTON
+            if(newsLimit >= allNews.length) {
+                $("#load-more-btn").css("display", "none");
+            }
+            
+            await axios.get(`${window.development}/api/get-all-news?limit=${newsLimit}`).then(res =>{
+                res.data.allNews.map(a => {
+                    return newsReturn(a);
+                })
+            })
+        }, 3000)
+    });
+
+    function newsReturn(a) {
         $("#news-wrapper").append(`
             <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box" style="background: #1D1E29;">
                 <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29; height: 200px;">
@@ -53,7 +83,7 @@ $(document).ready(async function() {
                 </div>
             </div>
         `)
-    });
+    }
 
     //RIGHT TREND APPEND
     let rightTrend = await axios
@@ -111,75 +141,53 @@ $(document).ready(async function() {
     $("#trend-4-author").text(mainTrend4.authorName);
     $("#trend-4-views").text(mainTrend4.pageViews);
     //Fifth trend
-    $('.trend-5 .emoji-1-img').attr('src', `/emotion-img/${mainTrend5.hashtag1}.svg`);
-    $('.trend-5 .emoji-2-img').attr('src', `/emotion-img/${mainTrend5.hashtag2}.svg`);
-    $(".trend-5").attr('data-id', `${mainTrend5._id}`);
-    $(".trend-5").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend5.image})`);
-    $("#trend-5-header").text(mainTrend5.newsHeader);
-    $("#trend-5-author").text(mainTrend5.authorName);
-    $("#trend-5-views").text(mainTrend5.pageViews);
+    $('.trend-5 .emoji-1-img, .trend-1-5 .emoji-1-img').attr('src', `/emotion-img/${mainTrend5.hashtag1}.svg`);
+    $('.trend-5 .emoji-2-img, .trend-1-5 .emoji-2-img').attr('src', `/emotion-img/${mainTrend5.hashtag2}.svg`);
+    $(".trend-5, .trend-1-5").attr('data-id', `${mainTrend5._id}`);
+    $(".trend-5, .trend-1-5").attr('style', `background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url(${mainTrend5.image})`);
+    $("#trend-5-header, #trend-1-5-header").text(mainTrend5.newsHeader);
+    $("#trend-5-author, #trend-1-5-author").text(mainTrend5.authorName);
+    $("#trend-5-views, #trend-1-5-views").text(mainTrend5.pageViews);
 
     //Main trend link
-    let formData = {}
+    let viewsData = {}
     $(".trend").click(async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = getAllNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
-
+        pageViewsCounter(id);
     });
     //News header text link
     $(document).on('click', '.news-box img, #news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = getAllNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        pageViewsCounter(id);
     });
     //right trend link
     $(document).on('click', '#right-news', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = rightTrend.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        pageViewsCounter(id);
     });
 
-    ///SECTION LINK///
-    $(".sections-li").click(function() {
-        let sectionVal = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(sectionVal));
-    });
+    ////PAGE VIEWS COUNT REAL TIME
+    async function pageViewsCounter(id) {
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
+
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
+    }
 
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
 
 });

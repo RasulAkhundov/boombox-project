@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/search.css">
+    <!-- Menu Link -->
+    <link rel="stylesheet" href="/css/menu.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/axios.min.js"></script>
@@ -20,6 +22,8 @@
     <script src="/js/searchGet.js"></script>
     <!-- config -->
     <script src="/js/config.js"></script>
+    <!-- Cookie import -->
+    <script src="/cookie/js.cookie.min.js"></script>
     <script src="/js/moment-with-locales.min.js"></script>
     <script src="/js/auth.js"></script>
     <title>Document</title>
@@ -27,6 +31,18 @@
 <body>
     
     <div class="main-container">
+
+        <!-- Scroll Up -->
+        <a href="#"><div class="scroll-up">
+            <i class="fas fa-arrow-up"></i>
+        </div></a>
+
+        <!-- LOADING WRAPPER -->
+        <div class="loading-wrapper">
+            <img src="/img/loading.gif" alt="">
+        </div>
+
+        <%- include('../parts/menu.ejs') -%>
 
         <%- include('../parts/header.ejs') -%>
 

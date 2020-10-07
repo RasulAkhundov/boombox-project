@@ -10,15 +10,21 @@
     <!-- SEMANTIC CSS -->
     <link rel="stylesheet" href="/semantic/semantic.min.css">
     <link rel="stylesheet" href="/css/full-news.css">
+    <!-- Menu Link -->
+    <link rel="stylesheet" href="/css/menu.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/axios.min.js"></script>
+    <!-- marked -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <!-- MODAL FUNCTIONS -->
     <script src="/modalFunctions-js/modalFunctions.js"></script>
     <!-- SEARCH POST -->
     <script src="/js/searchPost.js"></script>
     <!-- config -->
     <script src="/js/config.js"></script>
+    <!-- Cookie import -->
+    <script src="/cookie/js.cookie.min.js"></script>
     <script src="/js/moment-with-locales.min.js"></script>
     <script src="/js/auth.js"></script>
     <script src="/js/full-news.js"></script>
@@ -28,10 +34,17 @@
 <body>
     <div class="main-container">
 
+        <!-- Scroll Up -->
+        <a href="#"><div class="scroll-up">
+            <i class="fas fa-arrow-up"></i>
+        </div></a>
+
         <!-- LOADING WRAPPER -->
         <div class="loading-wrapper">
             <img src="/img/loading.gif" alt="">
         </div>
+
+        <%- include('../parts/menu.ejs') -%>
 
         <!-- SEMANTIC POPUP  -->
         <div class="success-modal warning-modal">
@@ -49,7 +62,7 @@
         <div class="news mt-5">
             <div class="row m-0 py-5 px-3 px-lg-5 d-flex align-items-start news_row">
                 <div class="col-12 px-1 px-sm-3">
-                    <div class="techno-news-location d-flex align-items-center px-0 px-sm-3 mb-4">
+                    <div class="techno-news-location d-flex align-items-center px-0 mb-4">
                         <a href="/">Ana Sefihe</a>
                         <i class="fas fa-angle-right"></i>
                         <span id="news-name-location"></span>
@@ -75,7 +88,10 @@
                             <h2 id="news-header-text"></h2>
                         </div>
                         <div class="news-description">
-                            <span id="news-description"></span>
+                            <!-- News description -->
+                        </div>
+                        <div class="news-iframe mt-3">
+                            <!-- news iframe append -->
                         </div>
                         <div class="about-news-author_cover d-flex flex-column flex-sm-row justify-content-start justify-content-sm-between align-items-start align-items-sm-center">
                             <div class="about-news-author d-flex align-items-center mb-3 mb-sm-0">
@@ -97,14 +113,14 @@
 
                     <!-- LIKE UNLIKE -->
                     <div class="like-unlike">
-                        <div class="like">
-                            <i class="fas fa-thumbs-up" id="like-btn"></i>
+                        <button type="button" class="like" id="like-btn">
+                            <i class="fas fa-thumbs-up"></i>
                             <span id="like-count">0</span>
-                        </div>
-                        <div class="unlike">
-                            <i class="fas fa-thumbs-down" id="like-btn"></i>
+                        </button>
+                        <button type="button" class="unlike" id="dislike-btn">
+                            <i class="fas fa-thumbs-down"></i>
                             <span id="unlike-count">0</span>
-                        </div>
+                        </button>
                     </div>
                     
                     <!-- ADD -->
@@ -142,6 +158,10 @@
                             <span style="color: #efefef; margin: 20px 0; font-size: 16px; display: none;" class="comment-without-login" style="display: none;">Şərh yazmaq üçün <a href="/login" style="color: #d02e3e; margin: 0 5px; text-decoration: #d02e3e;">daxil ol</a>malısınız.</span>
         
                             <span id="comment-count" style="font-size: 18px;"></span>
+                            <!-- comment append loading -->
+                            <div class="comment-append-loading">
+                                <img src="/img/loading-comment.gif" alt="">
+                            </div>
                             <!-- USER COMMENT -->
                             <div class="comments-complation"style="margin-top: 10px;">
                                 
@@ -205,7 +225,7 @@
                     <div class="col-12 p-0 d-flex flex-column align-items-center trending-news-wrapper" id="trending-news-wrapper">
                         <div class="d-flex justify-content-center align-items-center mb-3">
                             <i class="fas fa-bolt"></i>
-                            <h2>TRENDING</h2>
+                            <h2>TRENDLƏR</h2>
                         </div>
                     </div>
                 </div>

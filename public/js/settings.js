@@ -1,16 +1,14 @@
 $(document).ready(async function() {
 
-    if(!localStorage.getItem('user')) {
+    if(!Cookies.get('user')) {
         window.location.href = "/"
     }
     if(window.location.pathname === "/settings") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
         localStorage.removeItem('newsID');
     }
 
     //GETTING USER INFORMATION FROM LOCAL STORAGE
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
     let userData = parseJwt(tokenMe);
 
     let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
@@ -55,14 +53,19 @@ $(document).ready(async function() {
     });
 
     $("#change-btn").click(async function() {
+        $(".loading-wrapper").css("display", "flex");
         fdata.append('username', $("#name-change").val() || userName);
         fdata.append('bio', $("#bioqrafia").val() || userBio);
 
-        let usr = await axios
+        const usr = await axios
         .put(`/api/settings/profile-update/${userData.usr._id}`, fdata)
-        .then(res => res.data.user)
+        .then(res => res.data.user);
+        if(usr.settingsAlert) {
+            window.location.href = "/"
+        }
+        console.log(usr.settingsAlert);
 
-        localStorage.setItem('user', usr);
+        Cookies.set('user', usr);
         window.location.href = "/settings"
     });
 })

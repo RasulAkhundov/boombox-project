@@ -19,13 +19,16 @@ html, body {
     background-size: cover;
     background-repeat: no-repeat;
 }
+.warning-modal-comp {
+    margin-bottom: 5px;
+}
 .warning-modal {
-    width: 100%;
-    display: none;
+    width: 350px;
+    display: flex;
     padding: 15px 10px;
     background: rgba(243, 213, 148, 0.863);
     border: 1px solid rgb(95, 78, 37);
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     border-radius: 3px;
 }
 .warning-modal p {
@@ -111,7 +114,7 @@ button {
     .form-box {
         padding: 50px 20px;
     }
-    .form-box input {
+    .form-box input, .warning-modal {
         width: 300px;
     }
 }

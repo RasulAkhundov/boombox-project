@@ -1,11 +1,25 @@
 $(document).ready(async function() {
 
+    ///LOADING WRAPPER
+    $(window).on('load', function() {
+        $(".loading-wrapper").css('display', 'none');
+    })
+
+    ///SMOOTH SCROLL UP
+    $(window).scroll(function() {
+        let scrollY = window.scrollY;
+        if(scrollY >= 400) {
+            $(".scroll-up").css("display", "flex");
+        } else {
+            $(".scroll-up").css("display", "none");
+        }
+    })
+
     //GETTING USER INFORMATION FROM LOCAL STORAGE
 
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
 
     if(tokenMe) {
-
         let userData = parseJwt(tokenMe);
 
         let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
@@ -58,6 +72,33 @@ $(document).ready(async function() {
         ($(e.target).closest("#search-icon").length > 0 ))) {
             $(".search-box").slideUp(300);
             searchToggle = false;
+        }
+    });
+
+    ///Menu Navigation Toggle
+    $(".header-comp-1 .burger").click(function() {
+        $(".menu-navigation-cover").css("display", "flex");
+        $(".menu-navigation").removeClass('menu-close');
+        $(".menu-navigation").addClass('menu-open');
+        $(".main-container").css("overflow-y", "hidden");
+    });
+    $("#close-menu").click(function() {
+        $(".menu-navigation").removeClass('menu-open');
+        $(".menu-navigation").addClass('menu-close');
+        setTimeout(function() {
+            $(".menu-navigation-cover").css("display", "none");
+        }, 300)
+        $(".main-container").css("overflow-y", "auto");
+    });
+    $(".menu-navigation-cover").on('click', function(e) {
+        if(!(($(e.target).closest(".menu-navigation").length > 0 ) ||
+        ($(e.target).closest("#close-menu").length > 0 ))) {
+            $(".menu-navigation").removeClass('menu-open');
+            $(".menu-navigation").addClass('menu-close');
+            setTimeout(function() {
+                $(".menu-navigation-cover").css("display", "none");
+            }, 300)
+            $(".main-container").css("overflow-y", "auto");
         }
     });
 

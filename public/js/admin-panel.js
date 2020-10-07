@@ -1,13 +1,23 @@
 $(document).ready(async function() {
 
-    if(!localStorage.getItem('user')) {
+    if(!Cookies.get('user')) {
         window.location.href = "/"
     }
-    if(window.location.pathname === "/admin-panel") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
-        localStorage.removeItem('newsID');
+
+    let tokenMe = Cookies.get('user');
+
+    let userData = parseJwt(tokenMe);
+
+    let userMe = await axios.get(`${window.development}/api/user/${userData.usr._id}`).then(res => res.data.userInfo);
+
+    if(userMe.admin === false) {
+        window.location.href = "/"
     }
+
+    let authorId = userMe._id;
+    let userName = userMe.username;
+    let userImage = userMe.image;
+    let userBio = userMe.bio;
 
     //CREATE NEWS BUTTON ACTIVE CHANGES
     $(".create-side-header button").click(function() {
@@ -37,19 +47,22 @@ $(document).ready(async function() {
     //POSTING NEWS TO APi
     let allData = {};
 
-    //Techno NEWS Post
-    $("#techno-news-btn").click(async function() {
+    //Create NEWS Post
+    $("#create-news-btn").click(async function() {
         // allData.image = $("#image").val();
-        allData.mainContentName = "techno";
+        allData.mainContentName = $("#news-category").val();
         allData.newsHeader = $("#news-header-input").val();
         allData.newsDescription = $("#news-description").val();
+        allData.newsIframe = $("#news-iframe").val();
         allData.hashtag1 = $("#hashtag-1").val();
         allData.hashtag2 = $("#hashtag-2").val();
+        allData.authorId = authorId;
         allData.authorImage = userImage;
         allData.authorName = userName;
         allData.authorBio = userBio;
 
         if(allData.newsHeader === "" ||
+        allData.mainContentName === "" ||
         allData.newsDescription === "" ||
         allData.hashtag1 === "" ||
         allData.hashtag2 === "" ||
@@ -61,300 +74,77 @@ $(document).ready(async function() {
                 }, 3000);
             }
         } else {
+            // if($("#news-iframe").val()) {
+            //     allData.newsIframe = $("#news-iframe").val();
+            // }
             let allNews = await axios
             .post(`${window.development}/api/post-all-news`, allData)
             .then(res => {
-                $('.success-modal').css('display', 'flex');
-                if(successModal) {
-                    setTimeout(function() {
-                        $('.success-modal').css('display', 'none');
-                    }, 3000);
-                }
-                $("#image").val("");
-                $("#news-header-input").val("");
-                $("#news-description").val("");
-                $("#hashtag-1").val("");
-                $("#hashtag-2").val("");
-                $(".news_row").append(`
-                    <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 news-box" data-id="${res.data.allNews._id}" data-news-image="${res.data.allNews.image}">
-                        <button type="button" id="edit-news">Edit</button>
-                        <button type="button" id="delete-news">Sil</button>
-                        <div class="col-12 p-0 news-img-box" style="background: #1D1E29">
-                            <img src="${res.data.allNews.image}" data-id="${res.data.allNews._id}" alt="" style="border-radius: 5px 5px 0 0;" class="news-img">
-                            <div class="news-emoji">
-                                <div class="emoji-1 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag1}.svg" class="emoji-1-img" alt="">
-                                </div>
-                                <div class="emoji-2 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag2}.svg" class="emoji-2-img" alt="">
-                                </div>
-                            </div>
-                            <div class="news-view-count">
-                                <i class="far fa-eye"></i>
-                                <span>${res.data.allNews.pageViews}</span>
-                            </div>
-                        </div>
-                        <div class="col-12 py-3 px-4" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
-                            <div class="hashtag">
-                                <a href="#" id="hashtag-1-admin">${res.data.allNews.hashtag1}</a>
-                                <a href="#" id="hashtag-2-admin">${res.data.allNews.hashtag2}</a>
-                            </div>
-                            <div class="news-header">
-                                <h5 id="news-header" data-id="${res.data.allNews._id}">${res.data.allNews.newsHeader}</h5>
-                            </div>
-                            <div class="news-description">
-                                <span id="news-description">${res.data.allNews.newsDescription}</span>
-                            </div>
-                            <div class="news-author d-flex">
-                                <div class="author-avatar">
-                                    <img src="${res.data.allNews.authorImage}" alt="">
-                                </div>
-                                By
-                                <div class="author-name">
-                                    <a href="#">${res.data.allNews.authorName}</a>
-                                </div>
-                                <div class="news-date">
-                                    <span>${moment(`${res.data.allNews.date}`).locale('az').fromNow()}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `)
+                window.location.reload();
+                return res.data;
             });
         }
     })
 
-    //GAME NEWS POST
-    $("#game-news-btn").click(async function() {
-        allData.mainContentName = "game";
-        // allData.image = $("#image").val();
-        allData.newsHeader = $("#news-header-input").val();
-        allData.newsDescription = $("#news-description").val();
-        allData.hashtag1 = $("#hashtag-1").val();
-        allData.hashtag2 = $("#hashtag-2").val();
-        allData.authorImage = userImage;
-        allData.authorName = userName;
-        allData.authorBio = userBio;
-
-        if(allData.newsHeader === "" ||
-        allData.newsDescription === "" ||
-        allData.hashtag1 === "" ||
-        allData.hashtag2 === "" ||
-        $("#image").val() === "") {
-            $('.error-modal').css('display', 'flex');
-            if(errorModal) {
-                setTimeout(function() {
-                    $('.error-modal').css('display', 'none');
-                }, 3000);
-            }
-        } else {
-            let allNews = await axios
-            .post(`${window.development}/api/post-all-news`, allData)
-            .then(res => {
-                $('.success-modal').css('display', 'flex');
-                if(successModal) {
-                    setTimeout(function() {
-                        $('.success-modal').css('display', 'none');
-                    }, 3000);
-                }
-                $("#image").val("");
-                $("#news-header-input").val("");
-                $("#news-description").val("");
-                $("#hashtag-1").val("");
-                $("#hashtag-2").val("");
-                $(".news_row").append(`
-                    <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 news-box" data-id="${res.data.allNews._id}" data-news-image="${res.data.allNews.image}">
-                        <button type="button" id="edit-news">Edit</button>
-                        <button type="button" id="delete-news">Sil</button>
-                        <div class="col-12 p-0 news-img-box" style="background: #1D1E29">
-                            <img src="${res.data.allNews.image}" data-id="${res.data.allNews._id}" alt="" style="border-radius: 5px 5px 0 0;" class="news-img">
-                            <div class="news-emoji">
-                                <div class="emoji-1 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag1}.svg" class="emoji-1-img" alt="">
-                                </div>
-                                <div class="emoji-2 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag2}.svg" class="emoji-2-img" alt="">
-                                </div>
-                            </div>
-                            <div class="news-view-count">
-                                <i class="far fa-eye"></i>
-                                <span>${res.data.allNews.pageViews}</span>
-                            </div>
-                        </div>
-                        <div class="col-12 py-3 px-4" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
-                            <div class="hashtag">
-                                <a href="#" id="hashtag-1-admin">${res.data.allNews.hashtag1}</a>
-                                <a href="#" id="hashtag-2-admin">${res.data.allNews.hashtag2}</a>
-                            </div>
-                            <div class="news-header">
-                                <h5 id="news-header" data-id="${res.data.allNews._id}">${res.data.allNews.newsHeader}</h5>
-                            </div>
-                            <div class="news-description">
-                                <span id="news-description">${res.data.allNews.newsDescription}</span>
-                            </div>
-                            <div class="news-author d-flex">
-                                <div class="author-avatar">
-                                    <img src="${res.data.allNews.authorImage}" alt="">
-                                </div>
-                                By
-                                <div class="author-name">
-                                    <a href="#">${res.data.allNews.authorName}</a>
-                                </div>
-                                <div class="news-date">
-                                    <span>${moment(`${res.data.allNews.date}`).locale('az').fromNow()}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `)
-            });
-        }
-    });
-
-    //TREND NEWS POST
-    $("#trend-news-btn").click(async function() {
-        allData.mainContentName = "trend";
-        // allData.image = $("#image").val();
-        allData.newsHeader = $("#news-header-input").val();
-        allData.newsDescription = $("#news-description").val();
-        allData.hashtag1 = $("#hashtag-1").val();
-        allData.hashtag2 = $("#hashtag-2").val();
-        allData.authorImage = userImage;
-        allData.authorName = userName;
-        allData.authorBio = userBio;
-
-        if(allData.newsHeader === "" ||
-        allData.newsDescription === "" ||
-        allData.hashtag1 === "" ||
-        allData.hashtag2 === "" ||
-        $("#image").val() === "") {
-            $('.error-modal').css('display', 'flex');
-            if(errorModal) {
-                setTimeout(function() {
-                    $('.error-modal').css('display', 'none');
-                }, 3000);
-            }
-        } else {
-            let allNews = await axios
-            .post(`${window.development}/api/post-all-news`, allData)
-            .then(res => {
-                $('.success-modal').css('display', 'flex');
-                if(successModal) {
-                    setTimeout(function() {
-                        $('.success-modal').css('display', 'none');
-                    }, 3000);
-                }
-                $("#image").val("");
-                $("#news-header-input").val("");
-                $("#news-description").val("");
-                $("#hashtag-1").val("");
-                $("#hashtag-2").val("");
-                $(".news_row").append(`
-                    <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 news-box" data-id="${res.data.allNews._id}" data-news-image="${res.data.allNews.image}">
-                        <button type="button" id="edit-news">Edit</button>
-                        <button type="button" id="delete-news">Sil</button>
-                        <div class="col-12 p-0 news-img-box" style="background: #1D1E29">
-                            <img src="${res.data.allNews.image}" data-id="${res.data.allNews._id}" alt="" style="border-radius: 5px 5px 0 0;" class="news-img">
-                            <div class="news-emoji">
-                                <div class="emoji-1 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag1}.svg" class="emoji-1-img" alt="">
-                                </div>
-                                <div class="emoji-2 emoji-box">
-                                    <img src="/emotion-img/${res.data.allNews.hashtag2}.svg" class="emoji-2-img" alt="">
-                                </div>
-                            </div>
-                            <div class="news-view-count">
-                                <i class="far fa-eye"></i>
-                                <span>${res.data.allNews.pageViews}</span>
-                            </div>
-                        </div>
-                        <div class="col-12 py-3 px-4" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
-                            <div class="hashtag">
-                                <a href="#" id="hashtag-1-admin">${res.data.allNews.hashtag1}</a>
-                                <a href="#" id="hashtag-2-admin">${res.data.allNews.hashtag2}</a>
-                            </div>
-                            <div class="news-header">
-                                <h5 id="news-header" data-id="${res.data.allNews._id}">${res.data.allNews.newsHeader}</h5>
-                            </div>
-                            <div class="news-description">
-                                <span id="news-description">${res.data.allNews.newsDescription}</span>
-                            </div>
-                            <div class="news-author d-flex">
-                                <div class="author-avatar">
-                                    <img src="${res.data.allNews.authorImage}" alt="">
-                                </div>
-                                By
-                                <div class="author-name">
-                                    <a href="#">${res.data.allNews.authorName}</a>
-                                </div>
-                                <div class="news-date">
-                                    <span>${moment(`${res.data.allNews.date}`).locale('az').fromNow()}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `)
-            });
-        }
-    });
-
     /// GET ADMIN POST RIGHT NOW ///
     ///////////////////////////////
-    await axios.get(`${window.development}/api/get-all-news`).then(res => {
-        res.data.allNews.map(a => {
-            $(".news_row").append(`
-                <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 news-box" data-id="${a._id}" data-news-image="${a.image}">
-                    <button type="button" id="edit-news">Edit</button>
-                    <button type="button" id="delete-news">Sil</button>
-                    <div class="col-12 p-0 news-img-box" style="background: #1D1E29">
-                        <div class="news-img" data-id="${a._id}" alt="" style="border-radius: 5px 5px 0 0; background-image: url('${a.image}');">
-                        <div class="news-emoji">
-                            <div class="emoji-1 emoji-box">
-                                <img src="/emotion-img/${a.hashtag1}.svg" class="emoji-1-img" alt="">
-                            </div>
-                            <div class="emoji-2 emoji-box">
-                                <img src="/emotion-img/${a.hashtag2}.svg" class="emoji-2-img" alt="">
-                            </div>
+    let allNews = await axios
+    .get(`${window.development}/api/get-all-news`)
+    .then(res => res.data.allNews);
+    
+    allNews.map(a => {
+        $(".news_row").append(`
+            <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 news-box" data-id="${a._id}" data-news-image="${a.image}" data-news-header="${a.newsHeader}" data-news-description="${a.newsDescription}" data-news-hashtag1="${a.hashtag1}" data-news-hashtag2="${a.hashtag2}">
+                <button type="button" id="edit-news">Edit</button>
+                <button type="button" id="delete-news">Sil</button>
+                <div class="col-12 p-0 news-img-box" style="background: #1D1E29">
+                    <div class="news-img" data-id="${a._id}" alt="" style="border-radius: 5px 5px 0 0; background-image: url('${a.image}');">
+                    <div class="news-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/${a.hashtag1}.svg" class="emoji-1-img" alt="">
                         </div>
-                        <div class="news-view-count">
-                            <i class="far fa-eye"></i>
-                            <span>${a.pageViews}</span>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/${a.hashtag2}.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
-                    <div class="col-12 py-3 px-4" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
-                        <div class="hashtag">
-                            <a href="#" id="hashtag-1-admin">${a.hashtag1}</a>
-                            <a href="#" id="hashtag-2-admin">${a.hashtag2}</a>
+                    <div class="news-view-count">
+                        <i class="far fa-eye"></i>
+                        <span>${a.pageViews}</span>
+                    </div>
+                </div>
+                <div class="col-12 py-3 px-4" style="background: #1D1E29; border-radius: 0 0 5px 5px;">
+                    <div class="hashtag">
+                        <a href="#" id="hashtag-1-admin">${a.hashtag1}</a>
+                        <a href="#" id="hashtag-2-admin">${a.hashtag2}</a>
+                    </div>
+                    <div class="news-header">
+                        <h5 class="news-header-text" id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
+                    </div>
+                    <div class="news-description">
+                        <span id="news-description">${a.newsDescription.slice(0, 72)}...</span>
+                    </div>
+                    <div class="news-author d-flex">
+                        <div class="author-avatar">
+                            <img src="${a.authorImage}" alt="">
                         </div>
-                        <div class="news-header">
-                            <h5 class="news-header-text" id="news-header" data-id="${a._id}">${a.newsHeader}</h5>
+                        By
+                        <div class="author-name">
+                            <a href="#">${a.authorName}</a>
                         </div>
-                        <div class="news-description">
-                            <span id="news-description">${a.newsDescription}</span>
-                        </div>
-                        <div class="news-author d-flex">
-                            <div class="author-avatar">
-                                <img src="${a.authorImage}" alt="">
-                            </div>
-                            By
-                            <div class="author-name">
-                                <a href="#">${a.authorName}</a>
-                            </div>
-                            <div class="news-date">
-                                <span>${moment(`${a.date}`).locale('az').fromNow()}</span>
-                            </div>
+                        <div class="news-date">
+                            <span>${moment(`${a.date}`).locale('az').fromNow()}</span>
                         </div>
                     </div>
                 </div>
-            `)
-        })
+            </div>
+        `)
     })
 
     //ALLDATA AND TECHNO DATA IMAGE UPLOAD
     $("#image").on('change', function(e) {
         const image = $(this)[0].files[0];
 
-        if(image.size > 1200000) {
+        if(image.size > 10000000) {
             console.log("Size is to large");
             $(this).val("");
         } else {
@@ -371,66 +161,31 @@ $(document).ready(async function() {
     });
 
     //Main trend link
-    let formData = {}
-    $(".trend").click(async function() {
-        let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
-
-    });
+    let viewsData = {};
     //News header text link
-    $(document).on('click', '.news-box img, #news-header', async function() {
+    $(document).on('click', '.news-img, #news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
 
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
-    });
-    //right trend link
-    $(document).on('click', '#right-news', async function() {
-        let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
 
-        formData.pageViews = rightTrend.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
-    });
-
-    ///SECTION LINK///
-    $(".sections-li").click(function() {
-        let sectionVal = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(sectionVal));
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
     });
 
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1-admin', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2-admin', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
 
 
@@ -469,6 +224,42 @@ $(document).ready(async function() {
             localStorage.removeItem('deleted-news-info');
             window.location.reload();
         })
+    });
+
+    ///NEWS UPDATE///
+    ///MOdal Opening//
+    $(document).on('click', "#edit-news", function() {
+        let id = $(this).parent().data('id');
+        let newsHeader = $(this).parent().data('news-header');
+        let newsImage = $(this).parent().data('news-image');
+        let newsDescription = $(this).parent().data('news-description');
+        let hashtag1 = $(this).parent().data('news-hashtag1');
+        let hashtag2 = $(this).parent().data('news-hashtag2');
+
+        $(".news-update-modal").attr('data-news-id', id);
+        $(".news-update-hashtag .hashtag-1").val(hashtag1);
+        $(".news-update-hashtag .hashtag-2").val(hashtag2);
+        $(".news-update-img").attr('src', newsImage);
+        $(".news-update-header").val(newsHeader);
+        $(".news-update-description").val(newsDescription);
+        $(".news-update-modal-cover").css("display", "flex");
+    });
+    ///MOdal Closing//
+    $("#close-edit-modal").on('click', () => {
+        $(".news-update-modal-cover").css("display", "none");
+    });
+    
+    let editData = {};
+    $("#edit-edit-modal").click(async function() {
+        let id = $(".news-update-modal").attr('data-news-id');
+        editData.newsHeader = $(".news-update-header").val();
+        editData.newsDescription = $(".news-update-description").val();
+        editData.hashtag1 = $(".news-update-hashtag .hashtag-1").val();
+        editData.hashtag2 = $(".news-update-hashtag .hashtag-2").val();
+
+        await axios
+        .put(`${window.development}/api/edit-news/${id}`, editData)
+        window.location.reload();
     });
 
     /// SEARCH POST WITH INPUT //////

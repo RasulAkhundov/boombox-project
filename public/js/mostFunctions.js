@@ -1,11 +1,7 @@
 $(document).ready(async function() {
 
-    if(!localStorage.getItem('category')) {
-        window.location.href = '/'
-    }
-
     //GETTING USER INFORMATION FROM LOCAL STORAGE
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
         
@@ -64,52 +60,34 @@ $(document).ready(async function() {
         }
     });
 
-    //CATEGORY HASHTAG FILTERING WITH SELECT
-    $(".category_option").click(function() {
-        let order = {
-            name: $(this).data('order-name')
-        }
-
-        localStorage.setItem('order', JSON.stringify(order));
-    });
-
     ///CATEGORY LOCATION AND HEADER TEXT APPEND
-    let sectionVal = JSON.parse(localStorage.getItem('category'));
+    let href = new URL(window.location.href);
+    let hVal = href.searchParams.get('h');
+    let orderVal = href.searchParams.get('order');
 
-    $("#category_location, #category_header_h2").text(`${sectionVal.name}`);
+    $("#category_location, #category_header_h2").text(`${hVal}`);
 
-    $(".most-viewed").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=en-cox-baxilan`);
-    $(".new").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=yeni`);
-    $(".featured").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=xususi`);
-    $(".old").attr('href', `/category-${sectionVal.name.toLowerCase()}?order=en-kohne`);
+    $(".most-viewed").attr('href', `/category?h=${hVal}&order=en-cox-baxilan`);
+    $(".new").attr('href', `/category?h=${hVal}&order=en-yeni`);
+    $(".featured").attr('href', `/category?h=${hVal}&order=xususi`);
+    $(".old").attr('href', `/category?h=${hVal}&order=en-kohne`);
 
-    ///APPENDING HASHTAG CATEGORY///
+    ///LOCALSTORAGE ORDER SELECT ACTIVE;
+    if(!orderVal) {
+        $(`.category_options .en-yeni`).css('background', '#292c3b');
+    } else {
+        $(`.category_options .${orderVal}`).css('background', '#292c3b');
+    }
     
 
-    if(localStorage.getItem('order')) {
-        ///LOCALSTORAGE ORDER SELECT ACTIVE;
-        let order = JSON.parse(localStorage.getItem('order'));
-        if(!order.name) {
-            $("#category_text").text('Ən yeni');
-        } else {
-            if(order.name === "en-yeni") {
-                $("#category_text").text('Ən yeni');
-            } else if(order.name === "en-cox-baxilan") {
-                $("#category_text").text('Ən cox baxılan');
-            } else if(order.name === "xususi") {
-                $("#category_text").text('Xüsusi');
-            } else if(order.name === "en-kohne") {
-                $("#category_text").text('Ən köhnə');
-            }
-        }
-        $(`.category_options ${order.name}`).css('background', '#292c3b');
-
-        ///CATEGORY APPENDING FOR ORDER
-        let categoryOrder = await axios
-        .get(`${window.development}/api/category-${sectionVal.name}?order=${order.name}`)
+    ///CATEGORY APPENDING FOR ORDER
+    if(orderVal) {
+        let hashtagCategory = await axios
+        .get(`${window.development}/api/category?h=${hVal}&order=${orderVal}`)
         .then(res => res.data.categoryOrder);
-
-        categoryOrder.map(c => {
+        console.log(hashtagCategory)
+    
+        hashtagCategory.map(c => {
             $("#category-news-row").append(`
                 <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 full-news-box-cover">
                     <div class="col-12 p-0 full-news-box" style="background: #1D1E29; border-radius: 5px;">
@@ -137,7 +115,7 @@ $(document).ready(async function() {
                                 <h5 id="full-news-header" data-id="${c._id}">${c.newsHeader}</h5>
                             </div>
                             <div class="full-news-description">
-                                <span id="full-news-description">${c.newsDescription}</span>
+                                <span id="full-news-description">${c.newsDescription.slice(0, 72)}...</span>
                             </div>
                             <div class="full-news-author d-flex">
                                 <div class="author-avatar">
@@ -157,12 +135,12 @@ $(document).ready(async function() {
             `)
         })
     } else {
-        ///CATEGORY APPENDING FOR ORDER
-        let categoryOrder = await axios
-        .get(`${window.development}/api/category-${sectionVal.name}?order=en-yeni`)
+        let hashtagCategory = await axios
+        .get(`${window.development}/api/category?h=${hVal}`)
         .then(res => res.data.categoryOrder);
+        console.log(hashtagCategory)
 
-        categoryOrder.map(c => {
+        hashtagCategory.map(c => {
             $("#category-news-row").append(`
                 <div class="col-12 col-sm-6 col-lg-4 mb-3 mb-sm-0 p-0 p-sm-3 full-news-box-cover">
                     <div class="col-12 p-0 full-news-box" style="background: #1D1E29; border-radius: 5px;">
@@ -190,7 +168,7 @@ $(document).ready(async function() {
                                 <h5 id="full-news-header" data-id="${c._id}">${c.newsHeader}</h5>
                             </div>
                             <div class="full-news-description">
-                                <span id="full-news-description">${c.newsDescription}</span>
+                                <span id="full-news-description">${c.newsDescription.slice(0, 72)}</span>
                             </div>
                             <div class="full-news-author d-flex">
                                 <div class="author-avatar">
@@ -210,45 +188,32 @@ $(document).ready(async function() {
             `)
         })
     }
-
-    //News header text link
-    let allNews = await axios
-    .get(`${window.development}/api/get-all-news`)
-    .then(res => res.data.allNews);
     
-    let formData = {};
+    let viewsData = {};
     $(document).on('click', '.full-news-box img, #full-news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
 
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
+
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
     });
     
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
-
-    let test = window.location.href;
-    console.log(test.split("=")[1])
 
 });
 // jwt parse

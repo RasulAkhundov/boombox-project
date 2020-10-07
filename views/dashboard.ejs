@@ -9,6 +9,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/bootstrap-4.3.1-dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/dashboard.css">
+    <!-- Menu Link -->
+    <link rel="stylesheet" href="/css/menu.css">
     <script src="https://kit.fontawesome.com/a076d05399.js"></script>
     <script src="/js/jquery-3.4.1.min.js"></script>
     <script src="/js/axios.min.js"></script>
@@ -18,6 +20,8 @@
     <script src="/js/searchPost.js"></script>
     <!-- config -->
     <script src="/js/config.js"></script>
+    <!-- Cookie import -->
+    <script src="/cookie/js.cookie.min.js"></script>
     <script src="/js/moment-with-locales.min.js"></script>
     <script src="/js/auth.js"></script>
     <script src="/js/dashboard.js"></script>
@@ -25,6 +29,18 @@
 </head>
 <body>
     <div class="main-container">
+
+        <!-- Scroll Up -->
+        <a href="#"><div class="scroll-up">
+            <i class="fas fa-arrow-up"></i>
+        </div></a>
+
+        <!-- LOADING WRAPPER -->
+        <div class="loading-wrapper">
+            <img src="/img/loading.gif" alt="">
+        </div>
+
+        <%- include('../parts/menu.ejs') -%>
         
         <%- include('../parts/header.ejs') -%>
 
@@ -34,10 +50,10 @@
                 <div class="trend-1 trend">
                     <div class="trend-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="trend-info">
@@ -52,13 +68,36 @@
                         </div>
                     </div>
                 </div>
+                <div class="trend-1-5 trend">
+                    <div class="trend-emoji">
+                        <div class="emoji-1 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
+                        </div>
+                        <div class="emoji-2 emoji-box">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
+                        </div>
+                    </div>
+                    <div class="trend-info">
+                        <div class="trend-views d-flex align-items-center mb-1">
+                            <i class="far fa-eye mr-2"></i>
+                            <span id="trend-1-5-views"></span>
+                        </div>
+                        <h5 id="trend-1-5-header"></h5>
+                        <div class="trend-author">
+                            <p>by</p>
+                            <a href="/#" id="trend-1-5-author"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="trend-wrap-2">
                 <div class="trend-2 trend">
                     <div class="trend-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="trend-info">
@@ -73,15 +112,13 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="trend-wrap-2">
                 <div class="trend-3 trend">
                     <div class="trend-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="trend-info">
@@ -99,10 +136,10 @@
                 <div class="trend-4 trend">
                     <div class="trend-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="trend-info">
@@ -120,10 +157,10 @@
                 <div class="trend-5 trend">
                     <div class="trend-emoji">
                         <div class="emoji-1 emoji-box">
-                            <img src="" class="emoji-1-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-1-img" alt="">
                         </div>
                         <div class="emoji-2 emoji-box">
-                            <img src="" class="emoji-2-img" alt="">
+                            <img src="/emotion-img/mahni.svg" class="emoji-2-img" alt="">
                         </div>
                     </div>
                     <div class="trend-info">
@@ -143,10 +180,10 @@
         <!-- NEWS -->
         <div class="news">
             <div class="row m-0 py-5 px-3 px-lg-5 news_row">
-                <div class="col-12 col-lg-8 p-0 px-lg-3 mb-4" id="news-wrapper-cover">
+                <div class="col-12 col-lg-8 p-0 pr-lg-3 mb-4" id="news-wrapper-cover">
                     <!-- ALL NEWS HERE -->
                     <div class="news-wrapper" id="news-wrapper">
-
+                        
                     </div>
                     <button type="button" class="load-more-btn mx-auto" id="load-more-btn">Daha çox gör <img src="/img/loading.gif" class="load-more-btn-img" alt=""></button>
                 </div>
@@ -157,7 +194,7 @@
                     <div class="col-12 p-0 d-flex flex-column align-items-center trending-news-wrapper" id="trending-news-wrapper">
                         <div class="d-flex justify-content-center align-items-center mb-3">
                             <i class="fas fa-bolt"></i>
-                            <h2>TRENDING</h2>
+                            <h2>TRENDLƏR</h2>
                         </div>
                         <!-- Right Trend -->
                         <div class="right-trend col-12 col-sm-6 col-lg-12 p-0">

@@ -37,7 +37,7 @@ $(document).ready(async function(){
                             <h5 id="news-header" data-id="${s._id}">${s.newsHeader}</h5>
                         </div>
                         <div class="news-description">
-                            <span id="news-description">${s.newsDescription}</span>
+                            <span id="news-description">${s.newsDescription.slice(0, 100)}...</span>
                         </div>
                         <div class="news-author d-flex">
                             <div class="author-avatar">
@@ -59,11 +59,9 @@ $(document).ready(async function(){
 
     //GETTING SEARCH LENGTH RESULTS
     let searchLength = await axios.get(`${window.development}/api/search-length?q=${searchText}`).then(res => res.data.searchLength);
-    console.log(searchLength.length);
 
     ///PAGINATION LINK NUMBER
     let pageCount = Math.ceil(searchLength.length / 5);
-    console.log(pageCount)
 
     ///Checking page have pagination box or not;
     if(pageCount > 1) {
@@ -92,6 +90,8 @@ $(document).ready(async function(){
         $(".third-number-a").attr('href', `/search?q=${searchText}&page=${(Number(searchPage) + 1)}`);
     } else {
         $(".first-pagination-number").addClass('disable');
+        $(".second-pagination-number").addClass('disable');
+        $(".third-pagination-number").addClass('disable');
         $(".second-pagination-number").text(`1`);
         $(".third-pagination-number").text(`2`);
         $(".third-number-a").attr('href', `/search?q=${searchText}&page=2`);
@@ -99,44 +99,37 @@ $(document).ready(async function(){
     }
     if(searchPage - 1 == 0) {
         $(".first-pagination-number").addClass('disable');
+        $(".second-pagination-number").addClass('disable');
+        $(".third-pagination-number").addClass('disable');
     }
     if(Number(searchPage) + 1 > pageCount) {
         $(".third-pagination-number").addClass('disable');
     }
 
-    //GETTING ALL NEWS
-    let getAllNews = await axios.get(`${window.development}/api/get-all-news`).then(res => res.data.allNews);
-
-    let formData = {};
+    let viewsData = {};
     //News header text link
     $(document).on('click', '.search-news-img, #news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
 
-        formData.pageViews = getAllNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
     });
 
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
 
 });

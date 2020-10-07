@@ -1,10 +1,5 @@
 $(document).ready(async function() {
 
-    if(window.location.pathname === "/full-news") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
-    }
-
     //RIGHT TREND APPEND
     let rightTrend = await axios
     .get(`${window.development}/api/right-trend`)
@@ -22,38 +17,65 @@ $(document).ready(async function() {
     })
 
     //right trend link
-    let formData = {};
+    let viewsData = {};
     $(document).on('click', '#right-news', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
 
-        formData.pageViews = rightTrend.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
+
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
     });
 
     ////////GETTING FULL NEWS FROM DATA BASE////////
-    let newsID = localStorage.getItem('newsID');
+    let newsID = window.location.pathname.split("/")[2];
     let fullNews = await axios
     .get(`${window.development}/api/news/${newsID}`)
-    .then(res => res.data.fullNews);
+    .then(res => {
+        if(res.data.error) {
+            window.location.href = "/";
+        }
+        return res.data.fullNews;
+    });
 
-    //news view count
-    $("#news-view-count").text(`${fullNews.pageViews}`);
-    $("#about-author-bio").text(`${fullNews.authorBio}`);
+
+    ///GETTING NEWS VIEWS FROM RES JSON on REAL TIME
+    await axios.get(`${window.development}/api/news/${newsID}`).then(res => {
+        //news view count
+        $("#news-view-count").text(`${res.data.fullNews.pageViews}`);
+    });
+
+    ///GETTING USER INFORMATION
+    let authorInfo = await axios.get(`${window.development}/api/user/${fullNews.authorId}`).then(res => res.data.userInfo);
+
+    $("#about-author-bio").text(`${authorInfo.bio}`);
     $('.emoji-1-img').attr('src', `/emotion-img/${fullNews.hashtag1}.svg`);
     $('.emoji-2-img').attr('src', `/emotion-img/${fullNews.hashtag2}.svg`);
     $("#hashtag-1").text(`${fullNews.hashtag1}`);
     $("#hashtag-2").text(`${fullNews.hashtag2}`);
-    $("#news-header-text").text(`${fullNews.newsHeader}`);
-    $("#news-description").text(`${fullNews.newsDescription}`);
-    $("#author-image, #about-author-image").attr('src', `${fullNews.authorImage}`);
+    $("#news-header-text, title").text(`${fullNews.newsHeader}`);
+    $(".news-description").append(`
+        ${marked(fullNews.newsDescription)}
+    `);
+    $("#author-image, #about-author-image").attr('src', `${authorInfo.image}`);
     $("#news-image").attr('src', `${fullNews.image}`);
-    $("#author-name, #about-author-name").text(`${fullNews.authorName}`);
+    $("#author-name, #about-author-name").text(`${authorInfo.username}`);
     $("#news-name-location").text(`${fullNews.newsHeader}`);
     $("#news-adding-time").text(`${moment(fullNews.date).locale('az').fromNow()}`);
+    $("#like-btn span").text(fullNews.like.length);
+    $("#dislike-btn span").text(fullNews.dislike.length);
+
+    //YOUTUBE IFRAME APPEND
+    if(fullNews.newsIframe) {
+        $(".news-iframe").append(`
+            ${fullNews.newsIframe}
+        `)
+    }
 
     //////GETTING COMMENT///////
     $("#comment-count, #news-authour-comment-count").text(`${fullNews.comments.length} Serh:`);
@@ -75,16 +97,21 @@ $(document).ready(async function() {
         `)
     });
 
-    ///LOADING WRAPPER
-    setTimeout(() => {
-        $(".loading-wrapper").css('display', 'none');
-    }, 1500)
+    ///image full screen
+    let newsImages = $("#news-wrapper img");
+    $("#news-wrapper img").on('click', function() {
+        if(!document.fullscreenElement) {
+            newsImages.requestFullscreen();
+        } else {
+            document.exitFullscreen();
+        }
+    })
 
     ///modal functions
     let infoModal = $('.error-modal');
     
     //GETTING USER INFORMATION FROM LOCAL STORAGE
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
 
@@ -122,28 +149,104 @@ $(document).ready(async function() {
         ////////////////////
         $('.write-comment').css('display', 'flex');
         $('.comment-without-login').css('display', 'none');
-        let formData = {};
+        let commentData = {};
         $("#send-comment").click(async function() {
-            formData.id = fullNews._id;
-            formData.commentName = userName;
-            formData.commentImage = userImage;
-            formData.commentText = $("#comment-text").val();
-            console.log(formData);
+            commentData.id = fullNews._id;
+            commentData.commentName = userName;
+            commentData.commentImage = userImage;
+            commentData.commentText = $("#comment-text").val();
 
             let comment = await axios
-            .post(`${window.development}/api/do-comment`, formData)
+            .post(`${window.development}/api/do-comment`, commentData)
             .then(res => {
-                $('.success-modal').css('display', 'flex');
-                if(infoModal) {
-                    setTimeout(function() {
-                        $('.error-modal').css('display', 'none');
-                    }, 3000);
-                }
-                window.location.reload();
-                return res.data;
+                $(".comment-append-loading").css("display", "flex");
+                $("#comment-text").val("");
+
+                ///COMMENT APPEND
+                setTimeout(function() {
+                    $(".comment-append-loading").css("display", "none");
+                    $(".comments-complation").prepend(`
+                        <div class="user-comment">
+                            <img id="comment-avatar" src="${commentData.commentImage}" alt="">
+                            <div class="comment-body">
+                                <div class="comment-name">
+                                    <a href="#" id="comment-name">${commentData.commentName}</a>
+                                    <p id="comment-time">${moment(commentData.commentDate).locale('az').fromNow()}</p>
+                                </div>
+                                <div class="comment-description">
+                                    <p id="comment-description">${commentData.commentText}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+                }, 2000)
             });
         });
+
+        ////////////////////////
+        //////DO LIKE//////////
+        //////////////////////
+        let likeData = {};
+        $("#like-btn").click(async function() {
+            likeData.id = fullNews._id;
+            likeData.user = userMe._id;
+
+            let doLike = await axios
+            .post(`${window.development}/api/do-like`, likeData)
+            .then(res => {
+                $(this).css("background", "green");
+                $("#like-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#dislike-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#like-btn i").css('color', "#efefef");
+                $("#like-btn span").css('color', "#efefef");
+                $("#like-btn span").text(fullNews.like.length + 1);
+            });
+        });
+        ////////////////////////
+        //////DO DISLIKE//////////
+        //////////////////////
+        console.log(fullNews)
+        let dislikeData = {};
+        $("#dislike-btn").click(async function() {
+            dislikeData.id = fullNews._id;
+            dislikeData.user = userMe._id;
+
+            let doDislike = await axios
+            .post(`${window.development}/api/do-dislike`, dislikeData)
+            .then(res => {
+                $(this).css("background", "red");
+                $("#like-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#dislike-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#dislike-btn i").css('color', "#efefef");
+                $("#dislike-btn span").css('color', "#efefef");
+                $("#dislike-btn span").text(fullNews.dislike.length + 1);
+            });
+        })
+
+        ////CHECK USER DO LIKE
+        let mapLike = fullNews.like.map(like => {
+            if(like.user == userMe._id) {
+                $("#like-btn").css("background", 'green');
+                $("#like-btn i").css('color', "#efefef");
+                $("#like-btn span").css('color', "#efefef");
+                $("#like-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#dislike-btn").css("cursor", 'not-allowed')[0].disabled = true;
+            }
+        });
+        ////CHECK USER DO DISLIKE
+        let mapDislike = fullNews.dislike.map(dislike => {
+            if(dislike.user == userMe._id) {
+                $("#dislike-btn").css('background', 'red');
+                $("#dislike-btn i").css('color', "#efefef");
+                $("#dislike-btn span").css('color', "#efefef");
+                $("#like-btn").css("cursor", 'not-allowed')[0].disabled = true;
+                $("#dislike-btn").css("cursor", 'not-allowed')[0].disabled = true;
+            }
+        });
     } else {
+        $("#like-btn, #dislike-btn").click(function() {
+            window.location.href = "/login"
+        })
         $("#dash-login-btn").css("display", "flex");
         $('.write-comment').css('display', 'none');
         $('.comment-without-login').css('display', 'flex');
@@ -158,6 +261,8 @@ $(document).ready(async function() {
     ////////////////////////////////////
     ////SHOW NEXT AND PREVIOUS POST////
     //////////////////////////////////
+
+    let formData = {};
 
     //ALL NEWS APPEND
     let allNews = await axios
@@ -257,7 +362,7 @@ $(document).ready(async function() {
                         <h5 id="full-news-header" data-id="${m._id}">${m.newsHeader}</h5>
                     </div>
                     <div class="full-news-description">
-                        <span id="full-news-description">${m.newsDescription}</span>
+                        <span id="full-news-description">${m.newsDescription.slice(0, 72)}...</span>
                     </div>
                     <div class="full-news-author d-flex">
                         <div class="author-avatar">
@@ -277,7 +382,6 @@ $(document).ready(async function() {
     })
     $(document).on('click', '.full-news-box img, #full-news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
 
         formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
     
@@ -288,20 +392,12 @@ $(document).ready(async function() {
 
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
 })

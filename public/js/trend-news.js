@@ -1,22 +1,58 @@
 $(document).ready(async function() {
 
     if(window.location.pathname === "/trend") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
         localStorage.removeItem('newsID');
     }
 
     //GETTING TECHNO NEWS
+    let newsLimit = 10;
     let trend = await axios
-    .get(`${window.development}/api/get-trend-news`)
+    .get(`${window.development}/api/get-trend-news?limit=${newsLimit}`)
     .then(res => res.data.allNews);
 
+    //GETTING ALL NEWS LENGTH
+    let allNews = await axios.get(`${window.development}/api/get-trend-news`).then(res => res.data.allNews);
+
+    //DISPLAY NONE SEE MORE BUTTON
+    if(allNews.length <= newsLimit ) {
+        $("#load-more-btn").css("display", "none");
+    }
+
+    $("#load-more-btn").click(function() {
+        newsLimit += 10;
+        $(".load-more-btn-img").css("display", "flex");
+
+        setTimeout(async function() {
+            $(".news-box").remove();
+            $(".load-more-btn-img").css("display", "none");
+
+            ///DISPLAY NONE LOAD MORE BUTTON
+            if(newsLimit >= allNews.length) {
+                $("#load-more-btn").css("display", "none");
+            }
+            
+            await axios.get(`${window.development}/api/get-trend-news?limit=${newsLimit}`).then(res =>{
+                res.data.allNews.map((t, i) => {
+                    return newsReturn(t, i);
+                })
+            })
+        }, 3000)
+    })
+
     trend.map((t, i) => {
-        $("#news-wrapper").append(`
+        return newsReturn(t, i);
+    });
+
+    function newsReturn(t, i) {
+        $(".news-wrapper").append(`
             <div class="col-12 mb-4 p-0 d-flex flex-column flex-sm-row news-box">
             <div class="col-12 col-sm-6 p-0 news-img-box" style="background: #1D1E29">
                 <img src="${t.image}" data-id="${t._id}" alt="" style="border-radius: 5px 0 0 5px;">
                 <h2 class="number">${i += 1}</h2>
+                <div class="news-view-count d-flex align-items-center">
+                    <i class="far fa-eye"></i>
+                    <span>${t.pageViews}</span>
+                </div>
             </div>
                 <div class="col-12 col-sm-6 py-3 px-4" style="background: #1D1E29; border-radius: 0 5px 5px 0;">
                     <div class="hashtag">
@@ -41,13 +77,12 @@ $(document).ready(async function() {
                 </div>
             </div>
         `)
-    });
+    }
 
     //RIGHT TREND APPEND
     let rightTrend = await axios
     .get(`${window.development}/api/right-trend`)
     .then(res => res.data.rightTrend);
-    console.log(rightTrend);
     
     rightTrend.map((r, i) => {
         $(".right-trend").append(`
@@ -61,7 +96,7 @@ $(document).ready(async function() {
     })
 
     //GETTING USER INFORMATION FROM LOCAL STORAGE
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
     if(tokenMe) {
         let userData = parseJwt(tokenMe);
 
@@ -97,60 +132,40 @@ $(document).ready(async function() {
         $("#dash-login-btn").css("display", "flex");
     }
 
-    //ALL NEWS APPEND
-    let allNews = await axios
-    .get(`${window.development}/api/get-all-news`)
-    .then(res => res.data.allNews);
-
     //News header text link
-    let formData = {};
+    let viewsData = {};
     $(document).on('click', '.news-box img, #news-header', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = allNews.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        pageViewsCounter(id);
     });
     //right trend link
     $(document).on('click', '#right-news', async function() {
         let id = $(this).data('id');
-        localStorage.setItem('newsID', id);
-
-        formData.pageViews = rightTrend.filter(a => a._id === id)[0].pageViews + 1;
-    
-        await axios
-        .put(`${window.development}/api/update-page-views/${id}`, formData)
-        window.location.href = `/news/${id}`;
+        pageViewsCounter(id);
     });
 
-    ///SECTION LINK///
-    $(".sections-li").click(function() {
-        let sectionVal = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(sectionVal));
-    });
+    ////PAGE VIEWS COUNT REAL TIME
+    async function pageViewsCounter(id) {
+        await axios.get(`${window.development}/api/news/${id}`).then(res => {
+            viewsData.pageViews = res.data.fullNews.pageViews + 1;
+
+            async function updateViews() {
+                await axios.put(`${window.development}/api/update-page-views/${id}`, viewsData)
+                window.location.href = `/news/${id}`;
+            }
+            updateViews();
+        })
+    }
 
     ///NEWS HASHTAG 1 LINK GIVING
     $(document).on('click', '#hashtag-1', function() {
-        let hashtag1 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag1}`;
-        let hashtag1Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag1Val));
+        let hashtag1 = $(this).text();
+        window.location.href = `/category?h=${hashtag1}`;
     });
     ///NEWS HASHTAG 2 LINK GIVING
     $(document).on('click', '#hashtag-2', function() {
-        let hashtag2 = $(this).text().toLowerCase();
-        window.location.href = `/category-${hashtag2}`;
-        let hashtag2Val = {
-            name: $(this).text()
-        }
-        localStorage.setItem('category', JSON.stringify(hashtag2Val));
+        let hashtag2 = $(this).text();
+        window.location.href = `/category?h=${hashtag2}`;
     })
 
 });

@@ -1,11 +1,5 @@
 $(document).ready(function() {
 
-    if(window.location.pathname === "/") {
-        localStorage.removeItem('order');
-        localStorage.removeItem('category');
-        localStorage.removeItem('newsID');
-    }
-
     let passwordShow = false;
 
     $("#password_eye").click(() => {
@@ -22,14 +16,14 @@ $(document).ready(function() {
         }
     })
 
-    let tokenMe = localStorage.getItem('user');
+    let tokenMe = Cookies.get('user');
 
     if(tokenMe) {
         $("#dash-login-btn").css("display", "none")
         $("#user-profile").css("display", "flex");
         //logout
         $("#dash-logout-btn").click(function() {
-            localStorage.removeItem('user');
+            Cookies.remove('user');
             $("#dash-login-btn").css("display", "flex");
             $("#user-profile").css("display", "none");
             $("#user-profile-modal").css("display", "none");
@@ -47,18 +41,52 @@ $(document).ready(function() {
             formData.email = $("#email").val();
             formData.password = $("#password").val();
 
+            $(".warning-modal").remove();
             if(formData.username === "" || formData.email === "" || formData.password === "") {
-                $('.warning-modal').css('display', 'flex');
+                $(".warning-modal-comp").append(`
+                    <div class="warning-modal">
+                        <p>Zəhmət olmasa bütün boşluqları doldurun!</p>
+                    </div>
+                `)
             } else {
                 const token = await axios
                 .post(`${window.development}/api/register`, formData)
                 .then(res => res.data)
                 if(token.user) {
-                    $('.warning-modal').css('display', 'none');
-                    localStorage.setItem('user', token.user);
+                    $('.warning-modal-comp').css('display', 'none');
+                    Cookies.set('user', token.user, { expires: 365 } );
                     window.location.href = "/";
                 } else {
-                    console.log(token);
+                    if(token.error) {
+                        if(token.error.errors.username && token.error.errors.email) {
+                            $(".warning-modal-comp").append(`
+                                <div class="warning-modal">
+                                    <p>Bu e-poçt və istifadəci adı artıq istifadə olunur!</p>
+                                </div>
+                            `)
+                        } else if(token.error.errors.email) {
+                            $(".warning-modal-comp").append(`
+                                <div class="warning-modal">
+                                    <p>Bu e-poçt artıq istifadə olunur!</p>
+                                </div>
+                            `)
+                        } else {
+                            $(".warning-modal-comp").append(`
+                                <div class="warning-modal">
+                                    <p>Bu istifadəci adı artıq istifadə olunur!</p>
+                                </div>
+                            `)
+                        }
+                    }
+                    if(token.alert) {
+                        token.alert.forEach((error) => {
+                            $(".warning-modal-comp").append(`
+                                <div class="warning-modal">
+                                    <p>${error.msg}</p>
+                                </div>
+                            `)
+                        })
+                    }
                 }
             }
         });
@@ -68,18 +96,29 @@ $(document).ready(function() {
             formData.email = $("#email").val();
             formData.password = $("#password").val();
 
+            $(".warning-modal").remove();
             if(formData.email === "" || formData.password === "") {
-                $('.warning-modal').css('display', 'flex');
+                $(".warning-modal-comp").append(`
+                    <div class="warning-modal">
+                        <p>Zəhmət olmasa bütün boşluqları doldurun!</p>
+                    </div>
+                `)
             } else {
                 const token = await axios
                 .post(`${window.development}/api/login`, formData)
                 .then(res => res.data)
                 if(token.user) {
-                    $('.warning-modal').css('display', 'none');
-                    localStorage.setItem('user', token.user);
+                    $('.warning-modal-comp').css('display', 'none');
+                    Cookies.set('user', token.user, { expires: 365 } );
                     window.location.href = "/";
                 } else {
-                    console.log(token);
+                    if(token.alert) {
+                        $(".warning-modal-comp").append(`
+                            <div class="warning-modal">
+                                <p>${token.alert.msg}</p>
+                            </div>
+                        `)
+                    }
                 }
             }
         });

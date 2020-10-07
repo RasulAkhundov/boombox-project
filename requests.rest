@@ -1,1 +1,1 @@
-GET  http://192.168.1.104:4000/api/search-length?q=a
+GET  http://192.168.1.104:4000/api/category?h=Senet&order=en-yeni

@@ -1,6 +1,7 @@
 const app = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const connectDB = require("./connection/db");
 const mongoose = require("mongoose");
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -20,6 +21,8 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 app.use(bodyParser.json({ limit: "50mb" }));
 //cors
 app.use(cors());
+//mongodb
+connectDB();
 
 //express session
 app.use(
@@ -90,12 +93,12 @@ app.get("/news/:id", (req, res) => {
     res.render('full-news')
 });
 
-app.get("/category-:hashtag1", (req, res) => {
+app.get("/category", (req, res) => {
     res.render("mostFunctions");
 });
 
 app.get("/*", (req, res) => {
-    res.send('error 404 not found');
+    res.redirect('/');
 });
 
 // mongoose connect
@@ -118,6 +121,7 @@ io.on("connection", socket => {
     });
 });
 
-http.listen(4000, () => {
+const port = process.env.PORT || 4000;
+http.listen(port, () => {
     console.log("ready at 4000");
 })
