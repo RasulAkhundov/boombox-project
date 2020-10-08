@@ -750,6 +750,9 @@ footer .footer-footer {
     .trend-1-5 {
         display: none !important;
     }
+    #trend-1-header {
+        font-size: 22px;
+    }
     .header-comp-1 img {
         width: 150px;
     }

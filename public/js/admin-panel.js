@@ -232,6 +232,7 @@ $(document).ready(async function() {
         let newsDescription = $(this).parent().data('news-description');
         let hashtag1 = $(this).parent().data('news-hashtag1');
         let hashtag2 = $(this).parent().data('news-hashtag2');
+        console.log(newsDescription)
 
         $(".news-update-modal").attr('data-news-id', id);
         $(".news-update-hashtag .hashtag-1").val(hashtag1);
