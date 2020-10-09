@@ -674,12 +674,12 @@ header {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    border-bottom: 1px solid #292c3b;
 }
 .news-box .news-header h5:hover {
     color: #D02E3E;
 }
 .news-box .news-description {
-    border-bottom: 1px solid #292c3b;
     padding-bottom: 10px;
 }
 .news-box .news-description span {
