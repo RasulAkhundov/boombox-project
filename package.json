@@ -25,7 +25,8 @@
     "socket.io": "^4.5.1"
   },
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "heroku": "git add . && git commit -m 'heroku' && git push heroku master"
   },
   "keywords": [],
   "author": "",

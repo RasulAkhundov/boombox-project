@@ -20,9 +20,7 @@ app.use(require("express").static("public"));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 app.use(bodyParser.json({ limit: "50mb" }));
 //cors
-app.use(cors());
-//mongodb
-// connectDB();
+app.use(cors());s
 
 //express session
 app.use(
@@ -122,7 +120,7 @@ io.on("connection", socket => {
     });
 });
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 http.listen(port, () => {
     console.log("ready at 4000");
 })
