@@ -20,7 +20,7 @@ app.use(require("express").static("public"));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: false }));
 app.use(bodyParser.json({ limit: "50mb" }));
 //cors
-app.use(cors());s
+app.use(cors());
 
 //express session
 app.use(
