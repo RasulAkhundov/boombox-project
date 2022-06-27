@@ -120,7 +120,7 @@ io.on("connection", socket => {
     });
 });
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 http.listen(port, () => {
-    console.log("ready at 4000");
+    console.log("ready at 5000");
 })
