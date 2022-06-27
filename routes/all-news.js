@@ -231,10 +231,16 @@ router.get('/next/:id', (req, res) => {
 })
 
 //NEWS DELETE
-router.delete("/delete-news/:id", (req, res) => {
+router.delete("/delete-news/:id/filename/:filename", (req, res) => {
     const { id } = req.params;
-    const { image } = req.body;
-    console.log(image);
+    const { filename } = req.params;
+
+    fs.unlink(`./public/upload/all-news-image/${filename}`, function(err) {
+        if(err) {
+            console.log('error from deleting news image backend fs ' + err);
+        }
+    })
+    
     AllNews.findByIdAndDelete({ _id: id }, err => {
         if(err) {
             console.log("error from deleted news")

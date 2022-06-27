@@ -205,7 +205,7 @@ $(document).ready(async function() {
         let Deleted_News_Info = JSON.parse(localStorage.getItem('deleted-news-info'));
 
         let deleteNews = await axios
-        .delete(`${window.development}/api/delete-news/${Deleted_News_Info.id}`)
+        .delete(`${window.development}/api/delete-news/${Deleted_News_Info.id}/filename/${Deleted_News_Info.image.slice(23)}`)
         .then(res => {
             $('.success-modal').css('display', 'flex');
             $('.success-modal p').text('Xeber ugurla silindi !');

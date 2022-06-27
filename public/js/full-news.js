@@ -60,7 +60,7 @@ $(document).ready(async function() {
     $("#hashtag-2").text(`${fullNews.hashtag2}`);
     $("#news-header-text, title").text(`${fullNews.newsHeader}`);
     $(".news-description").append(`
-        ${marked(fullNews.newsDescription)}
+        ${fullNews.newsDescription}
     `);
     $("#author-image, #about-author-image").attr('src', `${authorInfo.image}`);
     $("#news-image").attr('src', `${fullNews.image}`);

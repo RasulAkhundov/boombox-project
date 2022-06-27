@@ -1,7 +1,7 @@
 const app = require("express")();
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const connectDB = require("./connection/db");
+// const connectDB = require("./connection/db");
 const mongoose = require("mongoose");
 const session = require('express-session');
 const flash = require('connect-flash');
@@ -22,7 +22,7 @@ app.use(bodyParser.json({ limit: "50mb" }));
 //cors
 app.use(cors());
 //mongodb
-connectDB();
+// connectDB();
 
 //express session
 app.use(
@@ -36,6 +36,9 @@ app.use(
 
 //flash
 app.use(flash());
+
+//MIDDLEWARES
+require('dotenv').config();
 
 //global varss
 
@@ -101,8 +104,7 @@ app.get("/*", (req, res) => {
     res.redirect('/');
 });
 
-// // mongoose connect
-// mongoose.set("useCreateIndex", true);
+// mongoose connect
 // mongoose.connect(
 //   "mongodb://localhost/boombox",
 //   {
@@ -112,6 +114,16 @@ app.get("/*", (req, res) => {
 //   },
 //   () => console.log("mongodb is ready")
 // );
+
+const URL = process.env.CONNECTDB_URL;
+mongoose.connect(URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+const connection = mongoose.connection;
+connection.once('open', () => {
+    console.log("MongoDB database connection establishing")
+})
 
 // socket io connect
 io.on("connection", socket => {
