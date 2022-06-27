@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "nodemon index.js",
-    "heroku": "git add . && git commit -m 'heroku' && git push heroku master"
+    "heroku": "git add . && git commit -m 'heroku' && git push heroku main"
   },
   "keywords": [],
   "author": "",
