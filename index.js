@@ -36,7 +36,7 @@ app.use(
 app.use(flash());
 
 //MIDDLEWARES
-require('dotenv').config({ path: 'ENV_FILENAME' });;
+require('dotenv').config({ path: 'CONNECTDB_URL' });;
 
 //global varss
 
