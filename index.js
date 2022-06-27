@@ -103,7 +103,7 @@ app.get("/*", (req, res) => {
 });
 
 const URL = process.env.CONNECTDB_URL;
-mongoose.connect(URL, {
+mongoose.createConnection(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
