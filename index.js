@@ -36,7 +36,7 @@ app.use(
 app.use(flash());
 
 //MIDDLEWARES
-require('dotenv').config({ path: 'CONNECTDB_URL' });;
+require('dotenv').config();
 
 //global varss
 
@@ -103,7 +103,8 @@ app.get("/*", (req, res) => {
 });
 
 const URL = process.env.CONNECTDB_URL;
-mongoose.createConnection(URL, {
+console.log(URL);
+mongoose.connect(URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
