@@ -104,17 +104,6 @@ app.get("/*", (req, res) => {
     res.redirect('/');
 });
 
-// mongoose connect
-// mongoose.connect(
-//   "mongodb://localhost/boombox",
-//   {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//     useFindAndModify: false
-//   },
-//   () => console.log("mongodb is ready")
-// );
-
 const URL = process.env.CONNECTDB_URL;
 mongoose.connect(URL, {
     useNewUrlParser: true,
