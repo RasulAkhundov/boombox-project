@@ -23,15 +23,7 @@
   "scripts": {
     "start": "nodemon index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Resulaxundov/Boombox-news-project.git"
-  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Resulaxundov/Boombox-news-project/issues"
-  },
-  "homepage": "https://github.com/Resulaxundov/Boombox-news-project#readme"
+  "license": "ISC"
 }
