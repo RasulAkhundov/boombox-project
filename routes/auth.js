@@ -109,7 +109,7 @@ router.put('/settings/profile-update/:id', upload.single('image'), async (req, r
                 if(err) {
                     res.send({ settingsAlert: 'Fayl çox böyükdur!' })
                 } else {
-                    res.status(200).json({ user: jwt.sign({ usr }, 'Rasul2002!') })
+                    res.status(200).json({ user: jwt.sign({ usr }, '123456') })
                 }
             }
         )
@@ -124,7 +124,7 @@ router.put('/settings/profile-update/:id', upload.single('image'), async (req, r
                 if(err) {
                     res.send({ settingsAlert: 'Fayl çox böyükdur!' })
                 } else {
-                    res.status(200).json({ user: jwt.sign({ usr }, 'Rasul2002!') })
+                    res.status(200).json({ user: jwt.sign({ usr }, '123456') })
                 }
             }
         )

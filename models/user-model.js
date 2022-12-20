@@ -46,7 +46,7 @@ schema.methods.generateJWT = function generateJWT() {
                 admin: this.admin
             }
         },
-        'Rasul2002!'
+        '123456'
     );
 };
 
